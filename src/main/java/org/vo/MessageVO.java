@@ -2,10 +2,9 @@ package org.vo;
 
 import org.po.MessagePO;
 import org.po.PO;
-import org.po.TagPO;
 import org.util.State;
+import org.util.TransUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,9 +36,7 @@ public class MessageVO implements VO {
 
     @Override
     public PO toPO() {
-        List<TagPO> tagPOS = new ArrayList<>(this.tags.size());
-        tags.forEach(tagVO -> tagPOS.add((TagPO) tagVO.toPO()));
-        return new MessagePO(messageId, userId, tagPOS, title, content, false, state);
+        return new MessagePO(messageId, userId, TransUtil.toPOList(tags), title, content, false, state);
     }
 
     public long getMessageId() {

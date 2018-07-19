@@ -11,7 +11,6 @@ public class TagVO implements VO{
 
     private long tagId;
 
-
     private String content;
 
     public TagVO(long tagId, String content) {
