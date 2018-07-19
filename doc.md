@@ -114,3 +114,6 @@ class Recommendation {
 	List<Tag> tags;//我认为深度资讯的推荐直接根据tag做比较好       
 }
 
+## 注意事项
+
+在填写对象的相关信息时，不需填写id，传送到后段后生成id

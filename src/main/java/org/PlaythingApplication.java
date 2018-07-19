@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableScheduling
 @SpringBootApplication
 @RestController
-public class PlayThingApplication extends SpringBootServletInitializer{
+public class PlaythingApplication extends SpringBootServletInitializer{
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder){
@@ -24,6 +24,6 @@ public class PlayThingApplication extends SpringBootServletInitializer{
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(PlayThingApplication.class, args);
+        SpringApplication.run(PlaythingApplication.class, args);
     }
 }
