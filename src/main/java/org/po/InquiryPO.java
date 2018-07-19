@@ -2,10 +2,13 @@ package org.po;
 
 import org.util.State;
 
+import javax.persistence.Entity;
+
 /**
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Entity
 public class InquiryPO implements PO {
     private long inquiryId;
     private long senderId;

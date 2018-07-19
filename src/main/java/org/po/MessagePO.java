@@ -3,12 +3,14 @@ package org.po;
 
 import org.util.State;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 /**
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Entity
 public class MessagePO implements PO {
 
     private long messageId;

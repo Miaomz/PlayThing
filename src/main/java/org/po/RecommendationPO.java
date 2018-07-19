@@ -1,11 +1,13 @@
 package org.po;
 
+import javax.persistence.Entity;
 import java.util.List;
 
 /**
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Entity
 public class RecommendationPO implements PO{
     private long rid;
     private String content;

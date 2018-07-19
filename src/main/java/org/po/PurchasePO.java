@@ -1,9 +1,12 @@
 package org.po;
 
+import javax.persistence.Entity;
+
 /**
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Entity
 public class PurchasePO implements PO {
     private long cid;
     private long buyerId;
