@@ -22,6 +22,14 @@ public class CommodityVO implements VO{
         this.description = description;
     }
 
+    public CommodityVO(CommodityPO commodityPO){
+        this.cid = commodityPO.getCid();
+        this.vendorId = commodityPO.getVendorId();
+        this.price = commodityPO.getPrice();
+        this.remainedQuantity = commodityPO.getRemainedQuantity();
+        this.description = commodityPO.getDescription();
+    }
+
     @Override
     public PO toPO() {
         return new CommodityPO(cid, vendorId, false, price, remainedQuantity, description);

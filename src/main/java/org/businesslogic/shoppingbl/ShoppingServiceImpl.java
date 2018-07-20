@@ -1,5 +1,8 @@
 package org.businesslogic.shoppingbl;
 
+import org.data.shoppingdata.ShoppingDAO;
+import org.po.CommodityPO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
 import org.vo.CommodityVO;
@@ -15,34 +18,41 @@ import java.util.List;
 @Component
 public class ShoppingServiceImpl implements ShoppingService {
 
+    private ShoppingDAO shoppingDAO;
+
+    @Autowired
+    public void setShoppingDAO(ShoppingDAO shoppingDAO) {
+        this.shoppingDAO = shoppingDAO;
+    }
+
     @Override
     public ResultMessage addCommodity(CommodityVO commodityVO) {
-        return null;
+        return shoppingDAO.addCommodity((CommodityPO) commodityVO.toPO());
     }
 
     @Override
     public ResultMessage addCommodityByInquiry(CommodityVO commodityVO, long inquiryId) {
-        return null;
+        return shoppingDAO.addCommodityByInquiry((CommodityPO) commodityVO.toPO(), inquiryId);
     }
 
     @Override
     public ResultMessage deleteCommodity(long commodityId) {
-        return null;
+        return shoppingDAO.deleteCommodity(commodityId);
     }
 
     @Override
     public ResultMessage modifyCommodity(CommodityVO commodityVO) {
-        return null;
+        return shoppingDAO.modifyCommodity((CommodityPO) commodityVO.toPO());
     }
 
     @Override
     public CommodityVO findCommodityById(long commodityId) {
-        return null;
+        return new CommodityVO(shoppingDAO.findCommodityById(commodityId));
     }
 
     @Override
     public CommodityVO findCommodityByInquiry(long inquiryId) {
-        return null;
+        return new CommodityVO(shoppingDAO.findCommodityByInquiry(inquiryId));
     }
 
     @Override
