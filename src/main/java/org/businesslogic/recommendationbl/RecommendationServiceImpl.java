@@ -2,12 +2,14 @@ package org.businesslogic.recommendationbl;
 
 import org.data.recommendationdata.RecommendationDAO;
 import org.po.RecommendationPO;
+import org.po.TagPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
 import org.vo.RecommendationVO;
 import org.vo.TagVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,7 +48,11 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public List<RecommendationVO> findRecommendationByTag(List<TagVO> tags) {
-
-        return null;
+        List<TagPO> tagPOS = new ArrayList<>(tags.size());
+        tags.forEach(tagVO -> tagPOS.add((TagPO) tagVO.toPO()));
+        List<RecommendationPO> recommendationPOS = recommendationDAO.findRecommendationByTag(tagPOS);
+        List<RecommendationVO> recommendationVOS = new ArrayList<>(recommendationPOS.size());
+        recommendationPOS.forEach(recommendationPO -> recommendationVOS.add(new RecommendationVO(recommendationPO)));
+        return recommendationVOS;
     }
 }
