@@ -27,6 +27,14 @@ public class PrivateMessageVO implements VO{
         this.content = content;
     }
 
+    public PrivateMessageVO(PrivateMessagePO privateMessagePO){
+        this.pmId = privateMessagePO.getPmId();
+        this.senderId = privateMessagePO.getSenderId();
+        this.receiverId = privateMessagePO.getReceiverId();
+        this.title = privateMessagePO.getTitle();
+        this.content = privateMessagePO.getContent();
+    }
+
     @Override
     public PO toPO() {
         return new PrivateMessagePO(pmId, senderId, receiverId, false, title, content);

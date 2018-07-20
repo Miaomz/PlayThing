@@ -1,5 +1,8 @@
 package org.businesslogic.recommendationbl;
 
+import org.data.recommendationdata.RecommendationDAO;
+import org.po.RecommendationPO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
 import org.vo.RecommendationVO;
@@ -14,28 +17,36 @@ import java.util.List;
 @Component
 public class RecommendationServiceImpl implements RecommendationService {
 
+    private RecommendationDAO recommendationDAO;
+
+    @Autowired
+    public void setRecommendationDAO(RecommendationDAO recommendationDAO) {
+        this.recommendationDAO = recommendationDAO;
+    }
+
     @Override
     public ResultMessage addRecommendation(RecommendationVO recommendationVO) {
-        return null;
+        return recommendationDAO.addRecommendation((RecommendationPO) recommendationVO.toPO());
     }
 
     @Override
     public ResultMessage deleteRecommendation(long recommendationId) {
-        return null;
+        return recommendationDAO.deleteRecommendation(recommendationId);
     }
 
     @Override
     public ResultMessage modifyRecommendation(RecommendationVO recommendationVO) {
-        return null;
+        return recommendationDAO.modifyRecommendation((RecommendationPO) recommendationVO.toPO());
     }
 
     @Override
     public RecommendationVO findRecommendationById(long rid) {
-        return null;
+        return new RecommendationVO(recommendationDAO.findRecommendationById(rid));
     }
 
     @Override
     public List<RecommendationVO> findRecommendationByTag(List<TagVO> tags) {
+
         return null;
     }
 }

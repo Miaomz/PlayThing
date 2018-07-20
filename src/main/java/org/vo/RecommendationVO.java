@@ -2,8 +2,10 @@ package org.vo;
 
 import org.po.PO;
 import org.po.RecommendationPO;
+import org.po.TagPO;
 import org.util.TransUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +21,15 @@ public class RecommendationVO implements VO {
         this.rid = rid;
         this.content = content;
         this.tags = tags;
+    }
+
+    public RecommendationVO(RecommendationPO recommendationPO) {
+        this.rid = recommendationPO.getRid();
+        this.content = recommendationPO.getContent();
+
+        List<TagPO> tagPOs = recommendationPO.getTags();
+        this.tags = new ArrayList<>(tagPOs.size());
+        tagPOs.forEach(tagPO -> tags.add(new TagVO(tagPO)));
     }
 
     @Override

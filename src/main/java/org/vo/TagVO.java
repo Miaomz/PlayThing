@@ -18,6 +18,11 @@ public class TagVO implements VO{
         this.content = content;
     }
 
+    public TagVO(TagPO tagPO){
+        this.tagId = tagPO.getTagId();
+        this.content = tagPO.getContent();
+    }
+
     @Override
     public PO toPO() {
         return new TagPO(tagId, false, content);
