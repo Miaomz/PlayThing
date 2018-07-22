@@ -18,6 +18,12 @@ public class PurchaseVO implements VO{
         this.quantity = quantity;
     }
 
+    public PurchaseVO(PurchasePO purchasePO) {
+        this.cid = purchasePO.getCid();
+        this.buyerId = purchasePO.getBuyerId();
+        this.quantity = purchasePO.getQuantity();
+    }
+
     @Override
     public PO toPO() {
         return new PurchasePO(cid, buyerId, quantity, false);

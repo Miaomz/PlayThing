@@ -1,5 +1,8 @@
 package org.businesslogic.userbl;
 
+import org.data.userdata.UserDAO;
+import org.po.UserPO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
 import org.vo.UserVO;
@@ -11,33 +14,40 @@ import org.vo.UserVO;
 @Component
 public class UserServiceImpl implements UserService {
 
+    private UserDAO userDAO;
+
+    @Autowired
+    public void setUserDAO(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
     @Override
     public ResultMessage addUser(UserVO user) {
-        return null;
+        return userDAO.addUser((UserPO) user.toPO());
     }
 
     @Override
     public ResultMessage deleteUser(long userId) {
-        return null;
+        return userDAO.deleteUser(userId);
     }
 
     @Override
     public ResultMessage modifyUser(UserVO user) {
-        return null;
+        return userDAO.modifyUser((UserPO) user.toPO());
     }
 
     @Override
     public UserVO findUserById(long userId) {
-        return null;
+        return new UserVO(userDAO.findUserById(userId));
     }
 
     @Override
     public ResultMessage login(String password) {
-        return null;
+        return userDAO.login(password);
     }
 
     @Override
     public ResultMessage changePassword(String oldPassword, String newPassword) {
-        return null;
+        return userDAO.changePassword(oldPassword, newPassword);
     }
 }

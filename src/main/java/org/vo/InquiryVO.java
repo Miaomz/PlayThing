@@ -21,6 +21,13 @@ public class InquiryVO implements VO {
         this.state = state;
     }
 
+    public InquiryVO(InquiryPO inquiryPO) {
+        this.inquiryId = inquiryPO.getInquiryId();
+        this.senderId = inquiryPO.getSenderId();
+        this.content = inquiryPO.getContent();
+        this.state = inquiryPO.getState();
+    }
+
     @Override
     public PO toPO() {
         return new InquiryPO(inquiryId, senderId, content, false, state);

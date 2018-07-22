@@ -5,6 +5,7 @@ import org.po.PO;
 import org.po.UserPO;
 import org.util.TransUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +33,17 @@ public class UserVO implements VO {
         this.role = role;
         this.balance = balance;
         this.tags = tags;
+    }
+
+    public UserVO(UserPO userPO) {
+        this.userId = userPO.getUserId();
+        this.name = userPO.getName();
+        this.password = userPO.getPassword();
+        this.role = userPO.getRole();
+        this.balance = userPO.getBalance();
+
+        this.tags = new ArrayList<>(userPO.getTags().size());
+        userPO.getTags().forEach(tagPO -> this.tags.add(new TagVO(tagPO)));
     }
 
     @Override

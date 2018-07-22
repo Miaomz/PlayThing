@@ -4,8 +4,6 @@ import org.po.TagPO;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
 
-import java.util.List;
-
 /**
  * @author miaomuzhi
  * @since 2018/7/20
@@ -23,7 +21,7 @@ public class TagDAOImpl implements TagDAO {
     }
 
     @Override
-    public List<TagPO> findTagById(long tagId) {
+    public TagPO findTagById(long tagId) {
         return null;
     }
 }

@@ -2,6 +2,8 @@ package org.businesslogic.shoppingbl;
 
 import org.data.shoppingdata.ShoppingDAO;
 import org.po.CommodityPO;
+import org.po.InquiryPO;
+import org.po.PurchasePO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
@@ -9,6 +11,7 @@ import org.vo.CommodityVO;
 import org.vo.InquiryVO;
 import org.vo.PurchaseVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,41 +60,50 @@ public class ShoppingServiceImpl implements ShoppingService {
 
     @Override
     public List<CommodityVO> findAllCommodities() {
-        return null;
+        List<CommodityPO> commodityPOS = shoppingDAO.findAllCommodities();
+        List<CommodityVO> commodityVOS = new ArrayList<>(commodityPOS.size());
+        commodityPOS.forEach(commodityPO -> commodityVOS.add(new CommodityVO(commodityPO)));
+        return commodityVOS;
     }
 
     @Override
     public ResultMessage buyCommodity(long cid, int quantity) {
-        return null;
+        return shoppingDAO.buyCommodity(cid, quantity);
     }
 
     @Override
     public ResultMessage addInquiry(InquiryVO inquiryVO) {
-        return null;
+        return shoppingDAO.addInquiry((InquiryPO) inquiryVO.toPO());
     }
 
     @Override
     public ResultMessage deleteInquiry(long inquiryId) {
-        return null;
+        return shoppingDAO.deleteInquiry(inquiryId);
     }
 
     @Override
     public ResultMessage modifyInquiry(InquiryVO inquiryVO) {
-        return null;
+        return shoppingDAO.modifyInquiry((InquiryPO) inquiryVO.toPO());
     }
 
     @Override
     public InquiryVO findInquiryById(long inquiryId) {
-        return null;
+        return new InquiryVO(shoppingDAO.findInquiryById(inquiryId));
     }
 
     @Override
     public List<InquiryVO> findAllInquiries() {
-        return null;
+        List<InquiryPO> inquiryPOS = shoppingDAO.findAllInquiries();
+        List<InquiryVO> inquiryVOS = new ArrayList<>(inquiryPOS.size());
+        inquiryPOS.forEach(inquiryPO -> inquiryVOS.add(new InquiryVO(inquiryPO)));
+        return inquiryVOS;
     }
 
     @Override
     public List<PurchaseVO> findAllPurchases() {
-        return null;
+        List<PurchasePO> purchasePOS = shoppingDAO.findAllPurchases();
+        List<PurchaseVO> purchaseVOS = new ArrayList<>(purchasePOS.size());
+        purchasePOS.forEach(purchasePO -> purchaseVOS.add(new PurchaseVO(purchasePO)));
+        return purchaseVOS;
     }
 }

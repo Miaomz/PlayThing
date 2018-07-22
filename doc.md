@@ -53,7 +53,7 @@ class Tag {
 
 1. ResultMessage addTag(Tag tag);
 2. ResultMessage modifyTag(Tag tag);
-3. List<Tag> findTagById(long tagId);
+3. Tag findTagById(long tagId);
 4. etc
 
 ### 3 user
