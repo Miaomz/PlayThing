@@ -1,18 +1,22 @@
 package org.po;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 /**
  * @author miaomuzhi
  * @since 2018/7/19
  */
 @Entity
+@Table(name = "tag")
 public class TagPO implements PO {
 
+    @Id
+    @GeneratedValue
     private long tagId;
 
     private boolean isDeleted;
 
+    @Column(name = "content", length = 64)
     private String content;
 
     public TagPO(long tagId, boolean isDeleted, String content) {

@@ -1,18 +1,30 @@
 package org.po;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author miaomuzhi
  * @since 2018/7/19
  */
 @Entity
+@Table(name = "commodity")
 public class CommodityPO implements PO{
+
+    @Id
     private long cid;
+
     private long vendorId;
+
     private boolean isDeleted;
+
     private double price;
+
     private int remainedQuantity;
+
+    @Column(name = "description", length = 1024)
     private String description;
 
     public CommodityPO(long cid, long vendorId, boolean isDeleted, double price, int remainedQuantity, String description) {

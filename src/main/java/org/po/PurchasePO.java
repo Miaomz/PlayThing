@@ -1,6 +1,8 @@
 package org.po;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * @author miaomuzhi
@@ -8,16 +10,33 @@ import javax.persistence.Entity;
  */
 @Entity
 public class PurchasePO implements PO {
+
+    @Id
+    @GeneratedValue
+    private long purchaseId;
+
     private long cid;
+
     private long buyerId;
+
     private int quantity;
+
     private boolean isDeleted;
 
-    public PurchasePO(long cid, long buyerId, int quantity, boolean isDeleted) {
+    public PurchasePO(long purchaseId, long cid, long buyerId, int quantity, boolean isDeleted) {
+        this.purchaseId = purchaseId;
         this.cid = cid;
         this.buyerId = buyerId;
         this.quantity = quantity;
         this.isDeleted = isDeleted;
+    }
+
+    public long getPurchaseId() {
+        return purchaseId;
+    }
+
+    public void setPurchaseId(long purchaseId) {
+        this.purchaseId = purchaseId;
     }
 
     public long getCid() {

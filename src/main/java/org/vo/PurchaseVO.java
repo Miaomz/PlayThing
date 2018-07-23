@@ -8,17 +8,20 @@ import org.po.PurchasePO;
  * @since 2018/7/19
  */
 public class PurchaseVO implements VO{
+    private long pid;
     private long cid;
     private long buyerId;
     private int quantity;
 
-    public PurchaseVO(long cid, long buyerId, int quantity) {
+    public PurchaseVO(long pid, long cid, long buyerId, int quantity) {
+        this.pid = pid;
         this.cid = cid;
         this.buyerId = buyerId;
         this.quantity = quantity;
     }
 
     public PurchaseVO(PurchasePO purchasePO) {
+        this.pid = purchasePO.getPurchaseId();
         this.cid = purchasePO.getCid();
         this.buyerId = purchasePO.getBuyerId();
         this.quantity = purchasePO.getQuantity();
@@ -26,7 +29,15 @@ public class PurchaseVO implements VO{
 
     @Override
     public PO toPO() {
-        return new PurchasePO(cid, buyerId, quantity, false);
+        return new PurchasePO(pid, cid, buyerId, quantity, false);
+    }
+
+    public long getPid() {
+        return pid;
+    }
+
+    public void setPid(long pid) {
+        this.pid = pid;
     }
 
     public long getCid() {

@@ -1,6 +1,6 @@
 package org.po;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -8,10 +8,19 @@ import java.util.List;
  * @since 2018/7/19
  */
 @Entity
+@Table(name = "recommendation")
 public class RecommendationPO implements PO{
+
+    @Id
+    @GeneratedValue
     private long rid;
+
+    @Column(name = "content", length = 1024)
     private String content;
+
     private boolean isDeleted;
+
+    @OneToMany
     private List<TagPO> tags;
 
     public RecommendationPO(long rid, String content, boolean isDeleted, List<TagPO> tags) {
