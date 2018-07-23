@@ -1,7 +1,6 @@
 package org.security;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
+import org.util.LoggerUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -33,7 +32,7 @@ public class MD5Encrypt {
             }
             newS = md5Buffer.toString();
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            LogManager.getLogger().log(Level.INFO, "normal", e);
+            LoggerUtil.getLogger().warning(e);
         }
         return newS;
     }

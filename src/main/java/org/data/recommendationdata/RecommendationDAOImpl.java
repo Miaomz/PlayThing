@@ -1,11 +1,10 @@
 package org.data.recommendationdata;
 
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
 import org.po.RecommendationPO;
 import org.po.TagPO;
 import org.springframework.stereotype.Component;
+import org.util.LoggerUtil;
 import org.util.ResultMessage;
 
 import javax.persistence.EntityManager;
@@ -29,7 +28,7 @@ public class RecommendationDAOImpl implements RecommendationDAO {
         try {
             entityManager.persist(recommendationPO);
         }catch (PersistenceException pe){
-            LogManager.getLogger().log(Level.INFO, "persist", pe);
+            LoggerUtil.getLogger().info(pe);
             return ResultMessage.FAILURE;
         }
         return ResultMessage.SUCCESS;
@@ -43,7 +42,7 @@ public class RecommendationDAOImpl implements RecommendationDAO {
             query.executeUpdate();
             entityManager.clear();
         } catch (PersistenceException e){
-            LogManager.getLogger().log(Level.INFO, "persist", e);
+            LoggerUtil.getLogger().info(e);
             return ResultMessage.FAILURE;
         }
         return ResultMessage.SUCCESS;
