@@ -3,7 +3,9 @@ package org.data.recommendationdata;
 
 import org.po.RecommendationPO;
 import org.po.TagPO;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.util.LoggerUtil;
 import org.util.ResultMessage;
 
@@ -35,6 +37,7 @@ public class RecommendationDAOImpl implements RecommendationDAO {
     }
 
     @Override
+    @Transactional
     public ResultMessage deleteRecommendation(long recommendationId) {
         try {
             Query query = entityManager.createQuery("update RecommendationPO r set r.isDeleted = false where r.rid = :deleteId");
@@ -49,8 +52,16 @@ public class RecommendationDAOImpl implements RecommendationDAO {
     }
 
     @Override
+    @Transactional
+    @Modifying
     public ResultMessage modifyRecommendation(RecommendationPO recommendationPO) {
-        return null;
+        try {
+            entityManager.merge(recommendationPO);
+            entityManager.flush();
+        }catch (PersistenceException pe){
+            return ResultMessage.FAILURE;
+        }
+        return ResultMessage.SUCCESS;
     }
 
     @Override

@@ -16,6 +16,17 @@ public class UserPO implements PO {
 
     private String password;
 
+    private String location;
+
+    private String phone;
+
+    private String mail;
+
+    /**
+     * 用户头像图片的url
+     */
+    private String display;
+
     private String role;
 
     private boolean isDeleted;
@@ -24,10 +35,16 @@ public class UserPO implements PO {
 
     private List<TagPO> tags;
 
-    public UserPO(long userId, String name, String password, String role, boolean isDeleted, double balance, List<TagPO> tags) {
+    public UserPO(long userId, String name, String password,
+                  String location, String phone, String mail, String display,
+                  String role, boolean isDeleted, double balance, List<TagPO> tags) {
         this.userId = userId;
         this.name = name;
         this.password = password;
+        this.location = location;
+        this.phone = phone;
+        this.mail = mail;
+        this.display = display;
         this.role = role;
         this.isDeleted = isDeleted;
         this.balance = balance;
@@ -56,6 +73,38 @@ public class UserPO implements PO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public void setDisplay(String display) {
+        this.display = display;
     }
 
     public String getRole() {
