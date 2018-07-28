@@ -2,6 +2,7 @@ package org.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableScheduling
 @SpringBootApplication
 @RestController
+@EntityScan(basePackages = "org.po")
 public class PlaythingApplication extends SpringBootServletInitializer{
 
     @Override

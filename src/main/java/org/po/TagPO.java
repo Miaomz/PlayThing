@@ -11,13 +11,15 @@ import javax.persistence.*;
 public class TagPO implements PO {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long tagId;
 
     private boolean isDeleted;
 
     @Column(name = "content", length = 64)
     private String content;
+
+    public TagPO() {}
 
     public TagPO(long tagId, boolean isDeleted, String content) {
         this.tagId = tagId;

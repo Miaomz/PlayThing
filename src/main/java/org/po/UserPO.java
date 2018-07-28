@@ -1,6 +1,9 @@
 package org.po;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 /**
@@ -10,6 +13,8 @@ import java.util.List;
 @Entity
 public class UserPO implements PO {
 
+    @Id
+    @GeneratedValue
     private long userId;
 
     private String name;
@@ -33,7 +38,10 @@ public class UserPO implements PO {
 
     private double balance;
 
+    @OneToMany(targetEntity = TagPO.class)
     private List<TagPO> tags;
+
+    public UserPO() {}
 
     public UserPO(long userId, String name, String password,
                   String location, String phone, String mail, String display,

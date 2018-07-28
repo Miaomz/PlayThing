@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = PlaythingApplication.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {org.data.tagdata.TagDAOImpl.class})
+@ContextConfiguration(classes = {org.data.tagdata.TagDAOImpl.class, org.po.TagPO.class})
 public class TagDAOTest {
 
     @Autowired
@@ -54,8 +54,10 @@ public class TagDAOTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void findTagById() {
-        tagDAO.addTag(tagPO);
+        tagDAO.addTag(new TagPO(0, false, "Test for spring data"));
         assertEquals("Test for spring data", tagDAO.findTagById(0).getContent());
     }
 }

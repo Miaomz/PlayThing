@@ -23,6 +23,9 @@ public class PurchasePO implements PO {
 
     private boolean isDeleted;
 
+    public PurchasePO() {
+    }
+
     public PurchasePO(long purchaseId, long cid, long buyerId, int quantity, boolean isDeleted) {
         this.purchaseId = purchaseId;
         this.cid = cid;

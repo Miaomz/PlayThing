@@ -12,7 +12,7 @@ import org.vo.TagVO;
  * @since 2018/7/19
  */
 @Component
-public class TagServiceImpl implements TagService{
+public class TagServiceImpl implements TagService {
 
     private TagDAO tagDAO;
 

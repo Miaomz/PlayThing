@@ -3,6 +3,8 @@ package org.po;
 import org.util.State;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * @author miaomuzhi
@@ -10,11 +12,15 @@ import javax.persistence.Entity;
  */
 @Entity
 public class InquiryPO implements PO {
+    @Id
+    @GeneratedValue
     private long inquiryId;
     private long senderId;
     private String content;
     private boolean isDeleted;
     private State state;
+
+    public InquiryPO() {}
 
     public InquiryPO(long inquiryId, long senderId, String content, boolean isDeleted, State state) {
         this.inquiryId = inquiryId;

@@ -15,7 +15,7 @@ import javax.persistence.PersistenceException;
  * @author miaomuzhi
  * @since 2018/7/20
  */
-@Component("tagDAO")
+@Component
 public class TagDAOImpl implements TagDAO {
 
     @PersistenceContext

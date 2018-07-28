@@ -23,6 +23,9 @@ public class RecommendationPO implements PO{
     @OneToMany
     private List<TagPO> tags;
 
+    public RecommendationPO() {
+    }
+
     public RecommendationPO(long rid, String content, boolean isDeleted, List<TagPO> tags) {
         this.rid = rid;
         this.content = content;

@@ -27,6 +27,8 @@ public class CommodityPO implements PO{
     @Column(name = "description", length = 1024)
     private String description;
 
+    public CommodityPO() {}
+
     public CommodityPO(long cid, long vendorId, boolean isDeleted, double price, int remainedQuantity, String description) {
         this.cid = cid;
         this.vendorId = vendorId;

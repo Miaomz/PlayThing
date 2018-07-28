@@ -1,6 +1,8 @@
 package org.po;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * @author miaomuzhi
@@ -9,6 +11,8 @@ import javax.persistence.Entity;
 @Entity
 public class PrivateMessagePO implements PO {
 
+    @Id
+    @GeneratedValue
     private long pmId;
 
     private long senderId;
