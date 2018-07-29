@@ -3,6 +3,8 @@ package org.data.userdata;
 import org.po.UserPO;
 import org.util.ResultMessage;
 
+import java.util.List;
+
 /**
  * @author miaomuzhi
  * @since 2018/7/20
@@ -16,6 +18,8 @@ public interface UserDAO {
     ResultMessage modifyUser(UserPO user);
 
     UserPO findUserById(long userId);
+
+    List<UserPO> findAllUsers();
 
     ResultMessage login(String password);
 

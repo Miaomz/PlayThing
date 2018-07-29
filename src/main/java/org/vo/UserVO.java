@@ -16,7 +16,7 @@ public class UserVO implements VO {
 
     private long userId;
 
-    private String name;
+    private String userName;
 
     private String password;
 
@@ -41,7 +41,7 @@ public class UserVO implements VO {
                   String location, String phone, String mail, String display,
                   String role, double balance, List<TagVO> tags) {
         this.userId = userId;
-        this.name = name;
+        this.userName = name;
         this.password = password;
         this.location = location;
         this.phone = phone;
@@ -54,7 +54,7 @@ public class UserVO implements VO {
 
     public UserVO(UserPO userPO) {
         this.userId = userPO.getUserId();
-        this.name = userPO.getName();
+        this.userName = userPO.getName();
         this.password = userPO.getPassword();
         this.location = userPO.getLocation();
         this.phone = userPO.getPhone();
@@ -69,7 +69,7 @@ public class UserVO implements VO {
 
     @Override
     public PO toPO() {
-        return new UserPO(userId, name, password, location, phone, mail, display, role, false, balance, TransUtil.toPOList(tags));
+        return new UserPO(userId, userName, password, location, phone, mail, display, role, false, balance, TransUtil.toPOList(tags));
     }
 
     public long getUserId() {
@@ -80,12 +80,12 @@ public class UserVO implements VO {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getLocation() {

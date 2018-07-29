@@ -5,5 +5,5 @@ package org.util;
  * @since 2018/7/19
  */
 public enum ResultMessage {
-    SUCCESS, FAILURE
+    SUCCESS, FAILURE, WRONG_PASS
 }

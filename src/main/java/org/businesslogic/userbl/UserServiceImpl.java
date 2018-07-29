@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
 import org.vo.UserVO;
 
+import java.util.List;
+
 /**
  * @author miaomuzhi
  * @since 2018/7/19
@@ -23,7 +25,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResultMessage addUser(UserVO user) {
-        return userDAO.addUser((UserPO) user.toPO());
+        List<UserPO> userPOList = userDAO.findAllUsers();
+        boolean isDuplicate = false;    //indicates whether there is an existing user with the same name
+        for (UserPO userPO : userPOList) {
+            if (userPO.getName().equals(user.getUserName())){
+                isDuplicate = true;
+                break;
+            }
+        }
+
+        if (isDuplicate){
+            return ResultMessage.FAILURE;
+        } else {
+            return userDAO.addUser((UserPO) user.toPO());
+        }
     }
 
     @Override

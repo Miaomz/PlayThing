@@ -25,15 +25,15 @@ public class MessageVO implements VO {
 
     private String content;
 
-    private State state;
+    private State status;
 
-    public MessageVO(long messageId, long userId, List<TagVO> tags, String title, String content, State state) {
+    public MessageVO(long messageId, long userId, List<TagVO> tags, String title, String content, State status) {
         this.messageId = messageId;
         this.userId = userId;
         this.tags = tags;
         this.title = title;
         this.content = content;
-        this.state = state;
+        this.status = status;
     }
 
     public MessageVO(MessagePO messagePO){
@@ -41,7 +41,7 @@ public class MessageVO implements VO {
         this.userId = messagePO.getUserId();
         this.title = messagePO.getTitle();
         this.content = messagePO.getContent();
-        this.state = messagePO.getState();
+        this.status = messagePO.getStatus();
 
         List<TagPO> tagPOs = messagePO.getTags();
         this.tags = new ArrayList<>(tagPOs.size());
@@ -50,7 +50,7 @@ public class MessageVO implements VO {
 
     @Override
     public PO toPO() {
-        return new MessagePO(messageId, userId, TransUtil.toPOList(tags), title, content, false, state);
+        return new MessagePO(messageId, userId, TransUtil.toPOList(tags), title, content, false, status);
     }
 
     public long getMessageId() {
@@ -93,11 +93,11 @@ public class MessageVO implements VO {
         this.content = content;
     }
 
-    public State getState() {
-        return state;
+    public State getStatus() {
+        return status;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setStatus(State status) {
+        this.status = status;
     }
 }

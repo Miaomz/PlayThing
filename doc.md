@@ -19,7 +19,7 @@ class Message {
 	String title;    
 	String content;         
 	boolean isDeleted;    
-	MessageState state;//包括待审批、审批不通过、审批成功等    
+	MessageState status;//包括待审批、审批不通过、审批成功等    
 }    
 
 1. ResultMessage addMessage(Message message);
@@ -89,7 +89,7 @@ class Inquiry {
 	long senderId;    
 	String content;    
 	boolean isDeleted;    
-	InquiryState state;//包括开发中、已满足等     
+	InquiryState status;//包括开发中、已满足等     
 }
 
 1. ResultMessage addInquiry(Inquiry inquiry);

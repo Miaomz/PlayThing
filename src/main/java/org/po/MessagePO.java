@@ -31,19 +31,19 @@ public class MessagePO implements PO {
 
     private boolean isDeleted;
 
-    private State state;
+    private State status;
 
     public MessagePO() {
     }
 
-    public MessagePO(long messageId, long userId, List<TagPO> tags, String title, String content, boolean isDeleted, State state) {
+    public MessagePO(long messageId, long userId, List<TagPO> tags, String title, String content, boolean isDeleted, State status) {
         this.messageId = messageId;
         this.userId = userId;
         this.tags = tags;
         this.title = title;
         this.content = content;
         this.isDeleted = isDeleted;
-        this.state = state;
+        this.status = status;
     }
 
     public long getMessageId() {
@@ -94,11 +94,11 @@ public class MessagePO implements PO {
         isDeleted = deleted;
     }
 
-    public State getState() {
-        return state;
+    public State getStatus() {
+        return status;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setStatus(State status) {
+        this.status = status;
     }
 }
