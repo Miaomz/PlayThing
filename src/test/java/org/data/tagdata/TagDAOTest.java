@@ -30,10 +30,12 @@ public class TagDAOTest {
     private TagDAO tagDAO;
 
     private TagPO tagPO;
+    private TagPO tagPO1;
 
     @Before
     public void setup(){
         tagPO = new TagPO(0, false, "Test for spring data");
+        tagPO1 = new TagPO(0, false, "After modified");
     }
 
     @Test
@@ -48,16 +50,23 @@ public class TagDAOTest {
     @Rollback
     public void modifyTag() {
         tagDAO.addTag(tagPO);
-        TagPO tagPO1 = new TagPO(0, false, "After modified");
-        tagDAO.modifyTag(tagPO1);
-        assertEquals("After modified", tagDAO.findTagById(0).getContent());
+        assertEquals(ResultMessage.SUCCESS, tagDAO.modifyTag(tagPO1));
     }
 
     @Test
     @Transactional
     @Rollback
     public void findTagById() {
-        tagDAO.addTag(new TagPO(0, false, "Test for spring data"));
-        assertEquals("Test for spring data", tagDAO.findTagById(0).getContent());
+        tagDAO.addTag(tagPO);
+        assertEquals("Test for spring data", tagDAO.findTagById(tagPO.getTagId()).getContent());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void findAllTags() {
+        tagDAO.addTag(tagPO);
+        tagDAO.addTag(tagPO1);
+        assertEquals(2, tagDAO.findAllTags().size());
     }
 }

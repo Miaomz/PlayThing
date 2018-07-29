@@ -1,9 +1,6 @@
 package org.po;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author miaomuzhi
@@ -14,6 +11,7 @@ import javax.persistence.Table;
 public class CommodityPO implements PO{
 
     @Id
+    @GeneratedValue
     private long cid;
 
     private long vendorId;

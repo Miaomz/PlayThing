@@ -3,6 +3,8 @@ package org.data.tagdata;
 import org.po.TagPO;
 import org.util.ResultMessage;
 
+import java.util.List;
+
 /**
  * @author miaomuzhi
  * @since 2018/7/20
@@ -14,4 +16,6 @@ public interface TagDAO {
     ResultMessage modifyTag(TagPO tag);
 
     TagPO findTagById(long tagId);
+
+    List<TagPO> findAllTags();
 }

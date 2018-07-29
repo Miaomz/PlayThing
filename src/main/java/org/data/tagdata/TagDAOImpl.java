@@ -10,6 +10,7 @@ import org.util.ResultMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.util.List;
 
 /**
  * @author miaomuzhi
@@ -49,5 +50,11 @@ public class TagDAOImpl implements TagDAO {
     @Override
     public TagPO findTagById(long tagId) {
         return entityManager.find(TagPO.class, tagId);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<TagPO> findAllTags() {
+        return entityManager.createQuery("select t from TagPO t").getResultList();
     }
 }
