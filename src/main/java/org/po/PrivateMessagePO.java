@@ -1,5 +1,6 @@
 package org.po;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,6 +24,7 @@ public class PrivateMessagePO implements PO {
 
     private String title;
 
+    @Column(length = 2048)
     private String content;
 
     public PrivateMessagePO(long pmId, long senderId, long receiverId, boolean isDeleted, String title, String content) {

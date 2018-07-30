@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultMessage addUser(UserVO user) {
+    public synchronized ResultMessage addUser(UserVO user) {
         List<UserPO> userPOList = userDAO.findAllUsers();
         boolean isDuplicate = false;    //indicates whether there is an existing user with the same name
         for (UserPO userPO : userPOList) {

@@ -3,6 +3,7 @@ package org.vo;
 import org.po.MessagePO;
 import org.po.PO;
 import org.po.TagPO;
+import org.util.PostType;
 import org.util.State;
 import org.util.TransUtil;
 
@@ -17,9 +18,17 @@ public class MessageVO implements VO {
 
     private long messageId;
 
-    private long userId;
+    private long writer;
 
     private List<TagVO> tags;
+
+    private PostType postType;
+
+    private List<String> pic;
+
+    private String video;
+
+    private List<String> covers;
 
     private String title;
 
@@ -27,10 +36,14 @@ public class MessageVO implements VO {
 
     private State status;
 
-    public MessageVO(long messageId, long userId, List<TagVO> tags, String title, String content, State status) {
+    public MessageVO(long messageId, long writer, List<TagVO> tags, PostType postType, List<String> pic, String video, List<String> covers, String title, String content, State status) {
         this.messageId = messageId;
-        this.userId = userId;
+        this.writer = writer;
         this.tags = tags;
+        this.postType = postType;
+        this.pic = pic;
+        this.video = video;
+        this.covers = covers;
         this.title = title;
         this.content = content;
         this.status = status;
@@ -38,7 +51,11 @@ public class MessageVO implements VO {
 
     public MessageVO(MessagePO messagePO){
         this.messageId = messagePO.getMessageId();
-        this.userId = messagePO.getUserId();
+        this.writer = messagePO.getUserId();
+        this.postType = messagePO.getPostType();
+        this.pic = messagePO.getPic();
+        this.video = messagePO.getVideo();
+        this.covers = messagePO.getCovers();
         this.title = messagePO.getTitle();
         this.content = messagePO.getContent();
         this.status = messagePO.getStatus();
@@ -50,7 +67,7 @@ public class MessageVO implements VO {
 
     @Override
     public PO toPO() {
-        return new MessagePO(messageId, userId, TransUtil.toPOList(tags), title, content, false, status);
+        return new MessagePO(messageId, writer, TransUtil.toPOList(tags), postType, pic, video, covers, title, content, false, status);
     }
 
     public long getMessageId() {
@@ -61,12 +78,12 @@ public class MessageVO implements VO {
         this.messageId = messageId;
     }
 
-    public long getUserId() {
-        return userId;
+    public long getWriter() {
+        return writer;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setWriter(long writer) {
+        this.writer = writer;
     }
 
     public List<TagVO> getTags() {
@@ -75,6 +92,38 @@ public class MessageVO implements VO {
 
     public void setTags(List<TagVO> tags) {
         this.tags = tags;
+    }
+
+    public List<String> getCovers() {
+        return covers;
+    }
+
+    public PostType getPostType() {
+        return postType;
+    }
+
+    public void setPostType(PostType postType) {
+        this.postType = postType;
+    }
+
+    public List<String> getPic() {
+        return pic;
+    }
+
+    public void setPic(List<String> pic) {
+        this.pic = pic;
+    }
+
+    public String getVideo() {
+        return video;
+    }
+
+    public void setVideo(String video) {
+        this.video = video;
+    }
+
+    public void setCovers(List<String> covers) {
+        this.covers = covers;
     }
 
     public String getTitle() {

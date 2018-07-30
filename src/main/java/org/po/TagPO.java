@@ -16,7 +16,7 @@ public class TagPO implements PO {
 
     private boolean isDeleted;
 
-    @Column(name = "content", length = 64)
+    @Column(unique = true, nullable = false, name = "content", length = 64)
     private String content;
 
     public TagPO() {}

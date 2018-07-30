@@ -2,6 +2,7 @@ package org.po;
 
 import org.util.State;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ public class InquiryPO implements PO {
     @GeneratedValue
     private long inquiryId;
     private long senderId;
+    @Column(length = 2048)
     private String content;
     private boolean isDeleted;
     private State state;

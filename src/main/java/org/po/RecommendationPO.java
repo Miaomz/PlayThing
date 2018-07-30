@@ -15,7 +15,7 @@ public class RecommendationPO implements PO{
     @GeneratedValue
     private long rid;
 
-    @Column(name = "content", length = 1024)
+    @Column(length = 2048)
     private String content;
 
     private boolean isDeleted;
