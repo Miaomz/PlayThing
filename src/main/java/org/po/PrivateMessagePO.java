@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 /**
  * @author miaomuzhi
@@ -24,16 +25,22 @@ public class PrivateMessagePO implements PO {
 
     private String title;
 
+    private LocalDateTime time;
+
+    private boolean isChecked;
+
     @Column(length = 2048)
     private String content;
 
-    public PrivateMessagePO(long pmId, long senderId, long receiverId, boolean isDeleted, String title, String content) {
+    public PrivateMessagePO(long pmId, long senderId, long receiverId, boolean isDeleted, String title, String content, LocalDateTime time, boolean isChecked) {
         this.pmId = pmId;
         this.senderId = senderId;
         this.receiverId = receiverId;
         this.isDeleted = isDeleted;
         this.title = title;
         this.content = content;
+        this.time = time;
+        this.isChecked = isChecked;
     }
 
     public long getPmId() {
@@ -82,5 +89,21 @@ public class PrivateMessagePO implements PO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

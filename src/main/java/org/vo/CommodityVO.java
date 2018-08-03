@@ -3,6 +3,7 @@ package org.vo;
 import org.po.CommodityPO;
 import org.po.PO;
 import org.po.TagPO;
+import org.util.ClassType;
 import org.util.PostType;
 import org.util.State;
 import org.util.TransUtil;
@@ -27,6 +28,7 @@ public class CommodityVO implements VO{
     private String title;
     private String content;
     private State status;
+    private ClassType type = ClassType.COMMODITY;
 
 
     public CommodityVO(long cid, long writer, double price, int remainedQuantity, List<TagVO> tagVOS, PostType postType, List<String> pic, String video, List<String> covers, String title, String content, State status) {
@@ -163,5 +165,11 @@ public class CommodityVO implements VO{
         this.remainedQuantity = remainedQuantity;
     }
 
+    public ClassType getType() {
+        return type;
+    }
 
+    public void setType(ClassType type) {
+        this.type = type;
+    }
 }

@@ -3,6 +3,7 @@ package org.vo;
 import org.po.MessagePO;
 import org.po.PO;
 import org.po.TagPO;
+import org.util.ClassType;
 import org.util.PostType;
 import org.util.State;
 import org.util.TransUtil;
@@ -19,6 +20,8 @@ public class MessageVO implements VO {
     private long messageId;
 
     private long writer;
+
+    private ClassType type = ClassType.MESSAGE;
 
     private List<TagVO> tags;
 
@@ -148,5 +151,13 @@ public class MessageVO implements VO {
 
     public void setStatus(State status) {
         this.status = status;
+    }
+
+    public ClassType getType() {
+        return type;
+    }
+
+    public void setType(ClassType type) {
+        this.type = type;
     }
 }
