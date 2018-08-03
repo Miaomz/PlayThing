@@ -3,9 +3,16 @@ package org.data.shoppingdata;
 import org.po.CommodityPO;
 import org.po.InquiryPO;
 import org.po.PurchasePO;
+import org.po.UserPO;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.util.LoggerUtil;
 import org.util.ResultMessage;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -14,73 +21,144 @@ import java.util.List;
  */
 @Component
 public class ShoppingDAOImpl implements ShoppingDAO {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
+    @Transactional
     public ResultMessage addCommodity(CommodityPO commodityPO) {
-        return null;
+        try {
+            entityManager.persist(commodityPO);
+        }catch (PersistenceException pe){
+            LoggerUtil.getLogger().info(pe);
+            return ResultMessage.FAILURE;
+        }
+        return ResultMessage.SUCCESS;
     }
 
     @Override
+    @Transactional
     public ResultMessage addCommodityByInquiry(CommodityPO commodityPO, long inquiryId) {
-        return null;
+        try {
+            entityManager.persist(commodityPO);
+            Query query = entityManager.createQuery("update InquiryPO i set i.commodityId = :cid where i.inquiryId = :iid");
+            query.setParameter("cid", commodityPO.getCid());
+            query.setParameter("iid", inquiryId);
+            query.executeUpdate();
+        }catch (PersistenceException pe){
+            LoggerUtil.getLogger().info(pe);
+            return ResultMessage.FAILURE;
+        }
+        return ResultMessage.SUCCESS;
     }
 
     @Override
+    @Transactional
     public ResultMessage deleteCommodity(long commodityId) {
-        return null;
+        Query query = entityManager.createQuery("update CommodityPO c set c.isDeleted = true where c.cid = :id");
+        query.setParameter("id", commodityId);
+        return (query.executeUpdate() == 1) ? ResultMessage.SUCCESS: ResultMessage.FAILURE;
     }
 
     @Override
+    @Transactional
     public ResultMessage modifyCommodity(CommodityPO commodityPO) {
-        return null;
+        try {
+            entityManager.merge(commodityPO);
+            entityManager.flush();
+        } catch (PersistenceException e){
+            return ResultMessage.FAILURE;
+        }
+        return ResultMessage.SUCCESS;
     }
 
     @Override
     public CommodityPO findCommodityById(long commodityId) {
-        return null;
+        return entityManager.find(CommodityPO.class, commodityId);
     }
 
     @Override
     public CommodityPO findCommodityByInquiry(long inquiryId) {
-        return null;
+        InquiryPO inquiryPO = entityManager.find(InquiryPO.class, inquiryId);
+        if (inquiryPO == null){
+            return null;
+        } else {
+            return findCommodityById(inquiryPO.getCommodityId());
+        }
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<CommodityPO> findAllCommodities() {
-        return null;
+        Query query = entityManager.createQuery("select c from CommodityPO c");
+        return query.getResultList();
     }
 
     @Override
-    public ResultMessage buyCommodity(long cid, int quantity) {
-        return null;
+    @Transactional
+    public ResultMessage buyCommodity(long cid, long uid, int quantity) {
+        CommodityPO commodityPO = entityManager.find(CommodityPO.class, cid);
+        UserPO userPO = entityManager.find(UserPO.class, uid);
+        if (commodityPO == null || userPO == null) {
+            return ResultMessage.INEXISTENCE;
+        }
+
+        //商品存量不足或用户余额不足
+        if (commodityPO.getRemainedQuantity() < quantity || commodityPO.getPrice()*quantity > userPO.getBalance()){
+            return ResultMessage.FAILURE;
+        }
+        commodityPO.setRemainedQuantity(commodityPO.getRemainedQuantity() - quantity);
+        userPO.setBalance(userPO.getBalance() - commodityPO.getPrice()*quantity);
+        return ResultMessage.SUCCESS;
     }
 
     @Override
+    @Transactional
     public ResultMessage addInquiry(InquiryPO inquiryPO) {
-        return null;
+        try {
+            entityManager.persist(inquiryPO);
+        }catch (PersistenceException pe){
+            LoggerUtil.getLogger().info(pe);
+            return ResultMessage.FAILURE;
+        }
+        return ResultMessage.SUCCESS;
     }
 
     @Override
     public ResultMessage deleteInquiry(long inquiryId) {
-        return null;
+        Query query = entityManager.createQuery("update InquiryPO i set i.isDeleted = true where i.inquiryId = :iid");
+        query.setParameter("iid", inquiryId);
+        return (query.executeUpdate() == 1)? ResultMessage.SUCCESS: ResultMessage.FAILURE;
     }
 
     @Override
     public ResultMessage modifyInquiry(InquiryPO inquiryPO) {
-        return null;
+        try {
+            entityManager.merge(inquiryPO);
+            entityManager.flush();
+        } catch (PersistenceException e){
+            return ResultMessage.FAILURE;
+        }
+        return ResultMessage.SUCCESS;
     }
 
     @Override
     public InquiryPO findInquiryById(long inquiryId) {
-        return null;
+        return entityManager.find(InquiryPO.class, inquiryId);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<InquiryPO> findAllInquiries() {
-        return null;
+        Query query = entityManager.createQuery("select i from InquiryPO i");
+        return query.getResultList();
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<PurchasePO> findAllPurchases() {
-        return null;
+        Query query = entityManager.createQuery("select p from PurchasePO p");
+        return query.getResultList();
     }
 }

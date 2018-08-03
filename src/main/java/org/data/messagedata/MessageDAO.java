@@ -1,8 +1,8 @@
 package org.data.messagedata;
 
+import org.po.CommentPO;
 import org.po.MessagePO;
 import org.po.PrivateMessagePO;
-import org.po.TagPO;
 import org.util.ResultMessage;
 
 import java.util.List;
@@ -21,9 +21,19 @@ public interface MessageDAO {
 
     MessagePO findMessageById(long mid);
 
-    List<MessagePO> findMessageByTag(TagPO tag);
+    List<MessagePO> findAllMessages();
+
+    ResultMessage addComment(CommentPO commentPO);
+
+    CommentPO getCommentById(long commentId);
+
+    List<CommentPO> getCommentByMessageId(long messageId);
 
     ResultMessage sendPrivateMes(PrivateMessagePO pm);
+
+    ResultMessage modifyPrivateMes(PrivateMessagePO pm);
+
+    ResultMessage checkPrivateMes(long pmId);
 
     List<PrivateMessagePO> findSentMes(long senderId);
 

@@ -67,8 +67,8 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
     @Override
-    public ResultMessage buyCommodity(long cid, int quantity) {
-        return shoppingDAO.buyCommodity(cid, quantity);
+    public ResultMessage buyCommodity(long cid, long uid, int quantity) {
+        return shoppingDAO.buyCommodity(cid, uid, quantity);
     }
 
     @Override

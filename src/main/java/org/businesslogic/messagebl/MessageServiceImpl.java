@@ -50,7 +50,16 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<MessageVO> findMessageByTag(TagVO tag) {
-        List<MessagePO> messagePOS = messageDAO.findMessageByTag((TagPO) tag.toPO());
+        List<MessagePO> messagePOS = messageDAO.findAllMessages();
+        messagePOS.removeIf(messagePO -> {
+            for (TagPO tagPO : messagePO.getTags()) {
+                if (tagPO.getContent().equals(tag.getContent())){
+                    return false;
+                }
+            }
+            return true;
+        });
+
         List<MessageVO> messageVOS = new ArrayList<>(messagePOS.size());
         messagePOS.forEach(messagePO -> messageVOS.add(new MessageVO(messagePO)));
         return messageVOS;

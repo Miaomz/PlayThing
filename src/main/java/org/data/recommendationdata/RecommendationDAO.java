@@ -1,7 +1,6 @@
 package org.data.recommendationdata;
 
 import org.po.RecommendationPO;
-import org.po.TagPO;
 import org.util.ResultMessage;
 
 import java.util.List;
@@ -20,5 +19,5 @@ public interface RecommendationDAO {
 
     RecommendationPO findRecommendationById(long rid);
 
-    List<RecommendationPO> findRecommendationByTag(List<TagPO> tags);
+    List<RecommendationPO> findAllRecommendations();
 }

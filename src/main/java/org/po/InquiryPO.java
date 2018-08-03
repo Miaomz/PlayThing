@@ -16,18 +16,24 @@ public class InquiryPO implements PO {
     @Id
     @GeneratedValue
     private long inquiryId;
+    @Column(nullable = false)
     private long senderId;
     @Column(length = 2048)
     private String content;
+    /**
+     * -1 代表没有对应商品
+     */
+    private long commodityId;
     private boolean isDeleted;
     private State state;
 
     public InquiryPO() {}
 
-    public InquiryPO(long inquiryId, long senderId, String content, boolean isDeleted, State state) {
+    public InquiryPO(long inquiryId, long senderId, String content, long commodityId, boolean isDeleted, State state) {
         this.inquiryId = inquiryId;
         this.senderId = senderId;
         this.content = content;
+        this.commodityId = commodityId;
         this.isDeleted = isDeleted;
         this.state = state;
     }
@@ -54,6 +60,14 @@ public class InquiryPO implements PO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public long getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(long commodityId) {
+        this.commodityId = commodityId;
     }
 
     public boolean isDeleted() {

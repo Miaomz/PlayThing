@@ -2,7 +2,6 @@ package org.data.recommendationdata;
 
 
 import org.po.RecommendationPO;
-import org.po.TagPO;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,8 +70,14 @@ public class RecommendationDAOImpl implements RecommendationDAO {
     }
 
     @Override
-    public List<RecommendationPO> findRecommendationByTag(List<TagPO> tags) {
-
-        return null;
+    @SuppressWarnings("unchecked")
+    public List<RecommendationPO> findAllRecommendations() {
+        try {
+            Query query = entityManager.createQuery("select r from RecommendationPO r");
+            return query.getResultList();
+        } catch (PersistenceException e){
+            LoggerUtil.getLogger().info(e);
+            return new ArrayList<>();
+        }
     }
 }

@@ -33,7 +33,7 @@ public interface ShoppingDAO {
 
     List<CommodityPO> findAllCommodities();
 
-    ResultMessage buyCommodity(long cid, int quantity);
+    ResultMessage buyCommodity(long cid, long uid, int quantity);
 
     ResultMessage addInquiry(InquiryPO inquiryPO);
 

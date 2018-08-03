@@ -48,9 +48,20 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public List<RecommendationVO> findRecommendationByTag(List<TagVO> tags) {
-        List<TagPO> tagPOS = new ArrayList<>(tags.size());
-        tags.forEach(tagVO -> tagPOS.add((TagPO) tagVO.toPO()));
-        List<RecommendationPO> recommendationPOS = recommendationDAO.findRecommendationByTag(tagPOS);
+        List<RecommendationPO> recommendationPOS = recommendationDAO.findAllRecommendations();
+        recommendationPOS.removeIf(recommendationPO -> {
+            boolean isDuplicate = false;
+            for (TagPO tagPO : recommendationPO.getTags()) {
+                for (TagVO tag : tags) {
+                    if (tagPO.getContent().equals(tag.getContent())){
+                        isDuplicate = true;
+                        break;
+                    }
+                }
+            }
+            return !isDuplicate;//如果没有重合，则删除
+        });
+
         List<RecommendationVO> recommendationVOS = new ArrayList<>(recommendationPOS.size());
         recommendationPOS.forEach(recommendationPO -> recommendationVOS.add(new RecommendationVO(recommendationPO)));
         return recommendationVOS;
