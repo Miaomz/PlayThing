@@ -32,6 +32,8 @@ public class PrivateMessagePO implements PO {
     @Column(length = 2048)
     private String content;
 
+    public PrivateMessagePO() {}
+
     public PrivateMessagePO(long pmId, long senderId, long receiverId, boolean isDeleted, String title, String content, LocalDateTime time, boolean isChecked) {
         this.pmId = pmId;
         this.senderId = senderId;

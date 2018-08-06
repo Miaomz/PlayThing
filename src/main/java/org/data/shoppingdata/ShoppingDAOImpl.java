@@ -4,6 +4,7 @@ import org.po.CommodityPO;
 import org.po.InquiryPO;
 import org.po.PurchasePO;
 import org.po.UserPO;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.util.LoggerUtil;
@@ -55,14 +56,18 @@ public class ShoppingDAOImpl implements ShoppingDAO {
 
     @Override
     @Transactional
+    @Modifying
     public ResultMessage deleteCommodity(long commodityId) {
         Query query = entityManager.createQuery("update CommodityPO c set c.isDeleted = true where c.cid = :id");
         query.setParameter("id", commodityId);
-        return (query.executeUpdate() == 1) ? ResultMessage.SUCCESS: ResultMessage.FAILURE;
+        ResultMessage resultMessage = (query.executeUpdate() == 1) ? ResultMessage.SUCCESS: ResultMessage.FAILURE;
+        entityManager.clear();
+        return resultMessage;
     }
 
     @Override
     @Transactional
+    @Modifying
     public ResultMessage modifyCommodity(CommodityPO commodityPO) {
         try {
             entityManager.merge(commodityPO);
@@ -97,6 +102,7 @@ public class ShoppingDAOImpl implements ShoppingDAO {
 
     @Override
     @Transactional
+    @Modifying
     public ResultMessage buyCommodity(long cid, long uid, int quantity) {
         CommodityPO commodityPO = entityManager.find(CommodityPO.class, cid);
         UserPO userPO = entityManager.find(UserPO.class, uid);
@@ -110,6 +116,7 @@ public class ShoppingDAOImpl implements ShoppingDAO {
         }
         commodityPO.setRemainedQuantity(commodityPO.getRemainedQuantity() - quantity);
         userPO.setBalance(userPO.getBalance() - commodityPO.getPrice()*quantity);
+        entityManager.clear();
         return ResultMessage.SUCCESS;
     }
 
@@ -126,13 +133,18 @@ public class ShoppingDAOImpl implements ShoppingDAO {
     }
 
     @Override
+    @Transactional
     public ResultMessage deleteInquiry(long inquiryId) {
         Query query = entityManager.createQuery("update InquiryPO i set i.isDeleted = true where i.inquiryId = :iid");
         query.setParameter("iid", inquiryId);
-        return (query.executeUpdate() == 1)? ResultMessage.SUCCESS: ResultMessage.FAILURE;
+        ResultMessage resultMessage = (query.executeUpdate() == 1)? ResultMessage.SUCCESS: ResultMessage.FAILURE;
+        entityManager.clear();
+        return resultMessage;
     }
 
     @Override
+    @Transactional
+    @Modifying
     public ResultMessage modifyInquiry(InquiryPO inquiryPO) {
         try {
             entityManager.merge(inquiryPO);

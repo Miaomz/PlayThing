@@ -33,6 +33,8 @@ public class CommentPO implements PO{
     @Column(length = 2048)
     private String content;
 
+    public CommentPO() {}
+
     public CommentPO(long commentId, boolean isDeleted, long postId, long replierId, String replier, LocalDateTime time, String content) {
         this.commentId = commentId;
         this.isDeleted = isDeleted;

@@ -38,6 +38,7 @@ public class RecommendationDAOImpl implements RecommendationDAO {
 
     @Override
     @Transactional
+    @Modifying
     public ResultMessage deleteRecommendation(long recommendationId) {
         try {
             Query query = entityManager.createQuery("update RecommendationPO r set r.isDeleted = false where r.rid = :deleteId");

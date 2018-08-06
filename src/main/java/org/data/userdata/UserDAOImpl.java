@@ -1,6 +1,7 @@
 package org.data.userdata;
 
 import org.po.UserPO;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.util.LoggerUtil;
@@ -35,6 +36,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    @Transactional
+    @Modifying
     public ResultMessage deleteUser(long userId) {
         try {
             Query query = entityManager.createQuery("update UserPO u set u.isDeleted = true where u.userId = :uid");
@@ -49,6 +52,8 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
+    @Transactional
+    @Modifying
     public ResultMessage modifyUser(UserPO user) {
         try {
             entityManager.merge(user);

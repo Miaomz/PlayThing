@@ -3,7 +3,9 @@ package org.data.messagedata;
 import org.po.CommentPO;
 import org.po.MessagePO;
 import org.po.PrivateMessagePO;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.util.LoggerUtil;
 import org.util.ResultMessage;
 import org.util.State;
@@ -25,6 +27,7 @@ public class MessageDAOImpl implements MessageDAO {
     private EntityManager entityManager;
 
     @Override
+    @Transactional
     public ResultMessage addMessage(MessagePO message) {
         try {
             entityManager.persist(message);
@@ -36,12 +39,15 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    @Modifying
+    @Transactional
     public Boolean checkMessage(long messageId) {
         try {
             Query query = entityManager.createQuery("update MessagePO m set m.status = :permitted where m.messageId = :id");
             query.setParameter("permitted", State.PERMITTED);
             query.setParameter("id", messageId);
             int statusCode = query.executeUpdate();
+            entityManager.clear(); //批量更新数据量大，hibernate的缓存并未更新，为避免影响，清空缓存，重新建立联系
             return statusCode == 1;//如正确运行，则被修改的行数（即返回值）为1
         }catch (PersistenceException pe){
             LoggerUtil.getLogger().info(pe);
@@ -50,6 +56,8 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    @Transactional
+    @Modifying
     public ResultMessage modifyMessage(MessagePO message) {
         try {
             entityManager.merge(message);
@@ -73,6 +81,7 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    @Transactional
     public ResultMessage addComment(CommentPO commentPO) {
         try {
             entityManager.persist(commentPO);
@@ -97,6 +106,7 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    @Transactional
     public ResultMessage sendPrivateMes(PrivateMessagePO pm) {
         try {
             entityManager.persist(pm);
@@ -108,6 +118,7 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    @Transactional
     public ResultMessage modifyPrivateMes(PrivateMessagePO pm) {
         try {
             entityManager.merge(pm);
@@ -119,9 +130,13 @@ public class MessageDAOImpl implements MessageDAO {
     }
 
     @Override
+    @Transactional
+    @Modifying
     public ResultMessage checkPrivateMes(long pmId) {
         Query query = entityManager.createQuery("update PrivateMessagePO p set p.isChecked = true");
-        return (query.executeUpdate() == 1) ? ResultMessage.SUCCESS: ResultMessage.FAILURE;
+        ResultMessage result = (query.executeUpdate() == 1) ? ResultMessage.SUCCESS: ResultMessage.FAILURE;
+        entityManager.clear();
+        return result;
     }
 
     @Override
