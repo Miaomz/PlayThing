@@ -5,6 +5,7 @@ import org.po.TagPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
+import org.util.TransUtil;
 import org.vo.TagVO;
 
 import java.util.ArrayList;
@@ -18,6 +19,12 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
 
     private TagDAO tagDAO;
+
+    @Autowired
+    public void setTagDAO(TagDAO tagDAO) {
+        this.tagDAO = tagDAO;
+    }
+
 
     @Override
     public TagVO findTagByContent(String content) {
@@ -33,14 +40,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<TagVO> findAllTags() {
         List<TagPO> tagPOS = tagDAO.findAllTags();
+        TransUtil.removeDeleted(tagPOS);
+
         List<TagVO> tagVOS = new ArrayList<>(tagPOS.size());
         tagPOS.forEach(tagPO -> tagVOS.add(new TagVO(tagPO)));
         return tagVOS;
-    }
-
-    @Autowired
-    public void setTagDAO(TagDAO tagDAO) {
-        this.tagDAO = tagDAO;
     }
 
     @Override
@@ -55,6 +59,11 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagVO findTagById(long tagId) {
-        return new TagVO(tagDAO.findTagById(tagId));
+        TagPO tagPO = tagDAO.findTagById(tagId);
+        if (tagPO != null && !tagPO.isDeleted()){
+            return new TagVO(tagPO);
+        } else {
+            return null;
+        }
     }
 }

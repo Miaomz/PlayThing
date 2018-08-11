@@ -7,6 +7,7 @@ import org.po.PurchasePO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
+import org.util.TransUtil;
 import org.vo.CommodityVO;
 import org.vo.InquiryVO;
 import org.vo.PurchaseVO;
@@ -50,17 +51,29 @@ public class ShoppingServiceImpl implements ShoppingService {
 
     @Override
     public CommodityVO findCommodityById(long commodityId) {
-        return new CommodityVO(shoppingDAO.findCommodityById(commodityId));
+        CommodityPO commodityPO = shoppingDAO.findCommodityById(commodityId);
+        if (commodityPO != null && !commodityPO.isDeleted()){
+            return new CommodityVO(commodityPO);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public CommodityVO findCommodityByInquiry(long inquiryId) {
-        return new CommodityVO(shoppingDAO.findCommodityByInquiry(inquiryId));
+        CommodityPO commodityPO = shoppingDAO.findCommodityByInquiry(inquiryId);
+        if (commodityPO != null && !commodityPO.isDeleted()){
+            return new CommodityVO(commodityPO);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<CommodityVO> findAllCommodities() {
         List<CommodityPO> commodityPOS = shoppingDAO.findAllCommodities();
+        TransUtil.removeDeleted(commodityPOS);
+
         List<CommodityVO> commodityVOS = new ArrayList<>(commodityPOS.size());
         commodityPOS.forEach(commodityPO -> commodityVOS.add(new CommodityVO(commodityPO)));
         return commodityVOS;
@@ -88,12 +101,19 @@ public class ShoppingServiceImpl implements ShoppingService {
 
     @Override
     public InquiryVO findInquiryById(long inquiryId) {
-        return new InquiryVO(shoppingDAO.findInquiryById(inquiryId));
+        InquiryPO inquiryPO = shoppingDAO.findInquiryById(inquiryId);
+        if (inquiryPO != null && !inquiryPO.isDeleted()){
+            return new InquiryVO(inquiryPO);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<InquiryVO> findAllInquiries() {
         List<InquiryPO> inquiryPOS = shoppingDAO.findAllInquiries();
+        TransUtil.removeDeleted(inquiryPOS);
+
         List<InquiryVO> inquiryVOS = new ArrayList<>(inquiryPOS.size());
         inquiryPOS.forEach(inquiryPO -> inquiryVOS.add(new InquiryVO(inquiryPO)));
         return inquiryVOS;
@@ -102,6 +122,8 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Override
     public List<PurchaseVO> findAllPurchases() {
         List<PurchasePO> purchasePOS = shoppingDAO.findAllPurchases();
+        TransUtil.removeDeleted(purchasePOS);
+
         List<PurchaseVO> purchaseVOS = new ArrayList<>(purchasePOS.size());
         purchasePOS.forEach(purchasePO -> purchaseVOS.add(new PurchaseVO(purchasePO)));
         return purchaseVOS;

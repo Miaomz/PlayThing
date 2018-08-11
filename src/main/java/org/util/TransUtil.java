@@ -1,7 +1,10 @@
 package org.util;
 
+import org.po.PO;
 import org.vo.VO;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,5 +25,18 @@ public class TransUtil {
         List<T> pos = new ArrayList<>(vos.size());
         vos.forEach(vo -> pos.add((T)vo.toPO()));
         return pos;
+    }
+
+    public static void removeDeleted(List<? extends PO> prevList){
+        prevList.removeIf(prev -> {
+            boolean isDeleted = true;//remove if some exception has been generated
+            try {
+                Method method = prev.getClass().getMethod("isDeleted");
+                isDeleted = (Boolean) method.invoke(prev);
+            } catch (NoSuchMethodException|IllegalAccessException|InvocationTargetException e){
+                LoggerUtil.getLogger().info(e);
+            }
+            return isDeleted;
+        });
     }
 }

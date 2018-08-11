@@ -7,6 +7,7 @@ import org.po.TagPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
+import org.util.TransUtil;
 import org.vo.MessageVO;
 import org.vo.PrivateMessageVO;
 import org.vo.TagVO;
@@ -45,12 +46,19 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageVO findMessageById(long mid) {
-        return new MessageVO(messageDAO.findMessageById(mid));
+        MessagePO messagePO = messageDAO.findMessageById(mid);
+        if (messagePO != null && !messagePO.isDeleted()){
+            return new MessageVO(messageDAO.findMessageById(mid));
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<MessageVO> findMessageByTag(TagVO tag) {
         List<MessagePO> messagePOS = messageDAO.findAllMessages();
+        TransUtil.removeDeleted(messagePOS);
+
         messagePOS.removeIf(messagePO -> {
             for (TagPO tagPO : messagePO.getTags()) {
                 if (tagPO.getContent().equals(tag.getContent())){
@@ -73,6 +81,8 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<PrivateMessageVO> findSentMes(long senderId) {
         List<PrivateMessagePO> privateMessagePOS = messageDAO.findSentMes(senderId);
+        TransUtil.removeDeleted(privateMessagePOS);
+
         List<PrivateMessageVO> privateMessageVOS = new ArrayList<>(privateMessagePOS.size());
         privateMessagePOS.forEach(privateMessagePO -> privateMessageVOS.add(new PrivateMessageVO(privateMessagePO)));
         return privateMessageVOS;
@@ -81,6 +91,8 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<PrivateMessageVO> findReceivedMes(long receiverId) {
         List<PrivateMessagePO> privateMessagePOS = messageDAO.findReceivedMes(receiverId);
+        TransUtil.removeDeleted(privateMessagePOS);
+
         List<PrivateMessageVO> privateMessageVOS = new ArrayList<>(privateMessagePOS.size());
         privateMessagePOS.forEach(privateMessagePO -> privateMessageVOS.add(new PrivateMessageVO(privateMessagePO)));
         return privateMessageVOS;

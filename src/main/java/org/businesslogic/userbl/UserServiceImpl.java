@@ -53,7 +53,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO findUserById(long userId) {
-        return new UserVO(userDAO.findUserById(userId));
+        UserPO userPO = userDAO.findUserById(userId);
+        if (userPO != null && !userPO.isDeleted()) {
+            return new UserVO(userPO);
+        } else {
+            return null;
+        }
     }
 
     @Override

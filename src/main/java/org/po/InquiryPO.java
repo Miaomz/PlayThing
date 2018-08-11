@@ -27,7 +27,9 @@ public class InquiryPO implements PO {
     private boolean isDeleted;
     private State state;
 
-    public InquiryPO() {}
+    public InquiryPO() {
+        this.commodityId = -1;
+    }
 
     public InquiryPO(long inquiryId, long senderId, String content, long commodityId, boolean isDeleted, State state) {
         this.inquiryId = inquiryId;

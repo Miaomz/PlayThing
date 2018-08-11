@@ -6,6 +6,7 @@ import org.po.TagPO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
+import org.util.TransUtil;
 import org.vo.RecommendationVO;
 import org.vo.TagVO;
 
@@ -43,12 +44,19 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public RecommendationVO findRecommendationById(long rid) {
-        return new RecommendationVO(recommendationDAO.findRecommendationById(rid));
+        RecommendationPO recommendationPO = recommendationDAO.findRecommendationById(rid);
+        if (recommendationPO != null && !recommendationPO.isDeleted()){
+            return new RecommendationVO(recommendationPO);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<RecommendationVO> findRecommendationByTag(List<TagVO> tags) {
         List<RecommendationPO> recommendationPOS = recommendationDAO.findAllRecommendations();
+        TransUtil.removeDeleted(recommendationPOS);
+
         recommendationPOS.removeIf(recommendationPO -> {
             boolean isDuplicate = false;
             for (TagPO tagPO : recommendationPO.getTags()) {
