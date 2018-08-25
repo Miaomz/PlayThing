@@ -1,5 +1,9 @@
 package org.po;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -7,6 +11,9 @@ import java.util.List;
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class UserPO implements PO {
 
@@ -40,109 +47,4 @@ public class UserPO implements PO {
     @OneToMany(targetEntity = TagPO.class)
     private List<TagPO> tags;
 
-    public UserPO() {}
-
-    public UserPO(long userId, String name, String password,
-                  String location, String phone, String mail, String display,
-                  String role, boolean isDeleted, double balance, List<TagPO> tags) {
-        this.userId = userId;
-        this.name = name;
-        this.password = password;
-        this.location = location;
-        this.phone = phone;
-        this.mail = mail;
-        this.display = display;
-        this.role = role;
-        this.isDeleted = isDeleted;
-        this.balance = balance;
-        this.tags = tags;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getDisplay() {
-        return display;
-    }
-
-    public void setDisplay(String display) {
-        this.display = display;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public List<TagPO> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<TagPO> tags) {
-        this.tags = tags;
-    }
 }

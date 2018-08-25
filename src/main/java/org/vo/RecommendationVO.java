@@ -1,5 +1,8 @@
 package org.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.po.PO;
 import org.po.RecommendationPO;
 import org.po.TagPO;
@@ -12,16 +15,13 @@ import java.util.List;
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RecommendationVO implements VO {
     private long rid;
     private String content;
     private List<TagVO> tags;
-
-    public RecommendationVO(long rid, String content, List<TagVO> tags) {
-        this.rid = rid;
-        this.content = content;
-        this.tags = tags;
-    }
 
     public RecommendationVO(RecommendationPO recommendationPO) {
         this.rid = recommendationPO.getRid();
@@ -35,29 +35,5 @@ public class RecommendationVO implements VO {
     @Override
     public PO toPO() {
         return new RecommendationPO(rid, content, false, TransUtil.toPOList(tags));
-    }
-
-    public long getRid() {
-        return rid;
-    }
-
-    public void setRid(long rid) {
-        this.rid = rid;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public List<TagVO> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<TagVO> tags) {
-        this.tags = tags;
     }
 }

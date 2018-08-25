@@ -1,0 +1,55 @@
+1.
+要求：根据用户和笔记状态返回其全部的笔记（state有四种：pass：审核通过；fail：审核未通过；uncheck：未审核；highlight：加精）
+参数：{“writer”:writerID,   ”state”:state}
+url：/get_state_posts
+返回：post[]
+
+2.
+要求：根据提交的表单数据，修改个人信息（地址，邮箱，电话，标记）
+url：/editPerInfo
+返回：成功返回：“SUCCESS”
+（与注册要求相仿）
+（userName: "",
+avatar: MultipartFile, //用户头像图片,可为null,后端需要设置对应的头像url
+location: "",
+mail: "",
+phone: "",
+tags: String[]）
+
+3.（因要支持视频播放，此接口返回类型可能会有修改）
+要求：根据标签返回对应的全部一期一会文章
+参数：{“kind”:kind}
+返回类型：article[]
+article：{“title”:’’,
+“src”:’’,
+“id”:’’}
+其中，title是文章标题，src是文章第一张图片的url，id是文章id
+url：/showArticle
+（注：前端分配工作时好像没有分配关于发布“一期一会”文章的界面，会尽快补上）
+
+
+4.
+要求：根据提交的表单数据，实现管理员登录（普通用户和管理员采用不同登录页面，区分开来）
+参数：userName：用户名
+      password：密码
+url：/adminLogin
+
+------
+
+1.管理员审核
+	url: '/receive_all_posts', 按状态获取所有笔记，返回post[]
+	提交的参数
+	"writer": 'administrator’
+	"status": uncheck, pass,  fail, recommend（参数值你把统一的给我，我按你那边的写）
+
+2.post展示
+	url:'/receive_posts',按标签获取所有文章，返回post[]
+	提交的参数
+	"tag":美食，人文，风景，习俗，手工，文化，服饰，自然，科技，传统，地标，音乐
+
+3.商品展示
+	url:'/receive_commodities',按标签获取所有商品，返回commodities[]
+	提交的参数
+	"tag":美食，书籍，母婴，服饰，家居，护肤，运动，宠物，保健品，数码，护理，其他
+
+

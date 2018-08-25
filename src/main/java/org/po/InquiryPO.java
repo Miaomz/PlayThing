@@ -1,5 +1,8 @@
 package org.po;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.util.State;
 
 import javax.persistence.Column;
@@ -11,6 +14,9 @@ import javax.persistence.Id;
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class InquiryPO implements PO {
     @Id
@@ -23,68 +29,7 @@ public class InquiryPO implements PO {
     /**
      * -1 代表没有对应商品
      */
-    private long commodityId;
+    private long commodityId = -1;
     private boolean isDeleted;
     private State state;
-
-    public InquiryPO() {
-        this.commodityId = -1;
-    }
-
-    public InquiryPO(long inquiryId, long senderId, String content, long commodityId, boolean isDeleted, State state) {
-        this.inquiryId = inquiryId;
-        this.senderId = senderId;
-        this.content = content;
-        this.commodityId = commodityId;
-        this.isDeleted = isDeleted;
-        this.state = state;
-    }
-
-    public long getInquiryId() {
-        return inquiryId;
-    }
-
-    public void setInquiryId(long inquiryId) {
-        this.inquiryId = inquiryId;
-    }
-
-    public long getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(long senderId) {
-        this.senderId = senderId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public long getCommodityId() {
-        return commodityId;
-    }
-
-    public void setCommodityId(long commodityId) {
-        this.commodityId = commodityId;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
-    }
 }

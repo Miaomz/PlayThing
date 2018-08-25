@@ -1,5 +1,8 @@
 package org.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.po.CommodityPO;
 import org.po.PO;
 import org.po.TagPO;
@@ -15,6 +18,9 @@ import java.util.List;
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommodityVO implements VO{
     private long cid;
     private long writer;
@@ -28,23 +34,9 @@ public class CommodityVO implements VO{
     private String title;
     private String content;
     private State status;
-    private ClassType type = ClassType.COMMODITY;
 
+    public static final ClassType TYPE = ClassType.COMMODITY;
 
-    public CommodityVO(long cid, long writer, double price, int remainedQuantity, List<TagVO> tagVOS, PostType postType, List<String> pic, String video, List<String> covers, String title, String content, State status) {
-        this.cid = cid;
-        this.writer = writer;
-        this.price = price;
-        this.remainedQuantity = remainedQuantity;
-        this.tagVOS = tagVOS;
-        this.postType = postType;
-        this.pic = pic;
-        this.video = video;
-        this.covers = covers;
-        this.title = title;
-        this.content = content;
-        this.status = status;
-    }
 
     public CommodityVO(CommodityPO commodityPO){
         this.cid = commodityPO.getCid();
@@ -67,109 +59,5 @@ public class CommodityVO implements VO{
     @Override
     public PO toPO() {
         return new CommodityPO(cid, writer, false, TransUtil.toPOList(tagVOS), postType, pic, video, covers, title, content, price, remainedQuantity, status);
-    }
-
-    public long getCid() {
-        return cid;
-    }
-
-    public void setCid(long cid) {
-        this.cid = cid;
-    }
-
-    public long getWriter() {
-        return writer;
-    }
-
-    public void setWriter(long writer) {
-        this.writer = writer;
-    }
-
-    public List<TagVO> getTagVOS() {
-        return tagVOS;
-    }
-
-    public void setTagVOS(List<TagVO> tagVOS) {
-        this.tagVOS = tagVOS;
-    }
-
-    public PostType getPostType() {
-        return postType;
-    }
-
-    public void setPostType(PostType postType) {
-        this.postType = postType;
-    }
-
-    public List<String> getPic() {
-        return pic;
-    }
-
-    public void setPic(List<String> pic) {
-        this.pic = pic;
-    }
-
-    public String getVideo() {
-        return video;
-    }
-
-    public void setVideo(String video) {
-        this.video = video;
-    }
-
-    public List<String> getCovers() {
-        return covers;
-    }
-
-    public void setCovers(List<String> covers) {
-        this.covers = covers;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public State getStatus() {
-        return status;
-    }
-
-    public void setStatus(State status) {
-        this.status = status;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getRemainedQuantity() {
-        return remainedQuantity;
-    }
-
-    public void setRemainedQuantity(int remainedQuantity) {
-        this.remainedQuantity = remainedQuantity;
-    }
-
-    public ClassType getType() {
-        return type;
-    }
-
-    public void setType(ClassType type) {
-        this.type = type;
     }
 }

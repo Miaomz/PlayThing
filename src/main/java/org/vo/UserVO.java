@@ -1,6 +1,9 @@
 package org.vo;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.po.PO;
 import org.po.UserPO;
 import org.util.TransUtil;
@@ -12,6 +15,9 @@ import java.util.List;
  * @author miaomuzhi
  * @since 2018/7/19
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserVO implements VO {
 
     private long userId;
@@ -37,21 +43,6 @@ public class UserVO implements VO {
 
     private List<TagVO> tags;
 
-    public UserVO(long userId, String name, String password,
-                  String location, String phone, String mail, String display,
-                  String role, double balance, List<TagVO> tags) {
-        this.userId = userId;
-        this.userName = name;
-        this.password = password;
-        this.location = location;
-        this.phone = phone;
-        this.mail = mail;
-        this.display = display;
-        this.role = role;
-        this.balance = balance;
-        this.tags = tags;
-    }
-
     public UserVO(UserPO userPO) {
         this.userId = userPO.getUserId();
         this.userName = userPO.getName();
@@ -70,85 +61,5 @@ public class UserVO implements VO {
     @Override
     public PO toPO() {
         return new UserPO(userId, userName, password, location, phone, mail, display, role, false, balance, TransUtil.toPOList(tags));
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getDisplay() {
-        return display;
-    }
-
-    public void setDisplay(String display) {
-        this.display = display;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-    public List<TagVO> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<TagVO> tags) {
-        this.tags = tags;
     }
 }
