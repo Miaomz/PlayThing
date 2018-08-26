@@ -1,17 +1,20 @@
 package org.controller;
 
 import org.businesslogic.messagebl.MessageService;
+import org.businesslogic.userbl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.util.ResultMessage;
+import org.vo.CommentVO;
 import org.vo.PrivateMessageVO;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
+import static org.util.ConstantString.USER_ID;
 
 /**
  * @author miaomuzhi
@@ -21,10 +24,16 @@ import java.util.List;
 public class MessageController {
 
     private MessageService messageService;
+    private UserService userService;
 
     @Autowired
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
+    }
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping("/get_chat")
@@ -62,9 +71,9 @@ public class MessageController {
     }
 
     @RequestMapping("/send_privateMessage")
-    public ResultMessage sendPrivateMessage(@RequestParam long receiverId, @RequestParam String content){
+    public ResultMessage sendPrivateMessage(@RequestParam long receiverId, @RequestParam String content, HttpSession session){
         PrivateMessageVO privateMessageVO = new PrivateMessageVO();
-        //TODO set sender id
+        privateMessageVO.setSenderId((Long) session.getAttribute(USER_ID));
         privateMessageVO.setReceiverId(receiverId);
         privateMessageVO.setTime(LocalDateTime.now());
         privateMessageVO.setChecked(false);//when the message is sent, it is originally not checked by receiver
@@ -73,12 +82,59 @@ public class MessageController {
     }
 
     @RequestMapping("/hasAllMessageChecked")
-    public boolean hasAllMessageChecked(){
-        //TODO
-        return false;
+    public boolean hasAllMessageChecked(HttpSession session){
+        List<PrivateMessageVO> privateMessageVOS = messageService.findReceivedMes((Long) session.getAttribute(USER_ID));
+        for (PrivateMessageVO privateMessageVO : privateMessageVOS) {
+            if (!privateMessageVO.isChecked()){
+                return false;
+            }
+        }
+        return true;
     }
 
+    @RequestMapping("/get_unsolved_contacts")
+    public Map<Long, Integer> getUnsolvedContacts(HttpSession session){
+        List<PrivateMessageVO> receivedMessages = messageService.findReceivedMes((Long) session.getAttribute(USER_ID));//current user is receiver
+        Map<Long, Integer> result = new HashMap<>();
+        receivedMessages.forEach(receivedMessage -> {
+            long senderId = receivedMessage.getSenderId();
+            result.putIfAbsent(senderId, 0);//the senders whose messages have read completely still need to be displayed
 
+            if (!receivedMessage.isChecked()){
+                result.put(senderId, result.get(senderId) + 1);
+            }
+        });
+        return result;
+    }
+
+    @RequestMapping("/read_private_message")
+    public void readPrivateMessage(@RequestParam long senderId, HttpSession session){
+        List<PrivateMessageVO> receivedMessages = messageService.findReceivedMes((Long) session.getAttribute(USER_ID));
+        receivedMessages.forEach(receivedMessage -> {
+            if (receivedMessage.getSenderId() == senderId){
+                receivedMessage.setChecked(true);
+            }
+        });
+    }
+
+    @RequestMapping("/get_comment")
+    public List<CommentVO> getComments(@RequestParam long postId){
+        return messageService.findCommentsByMessage(postId);
+    }
+
+    @RequestMapping("/share_comment")
+    public ResultMessage shareComment(@RequestParam long postId, @RequestParam String content, HttpSession session){
+        long replierId = (Long) session.getAttribute(USER_ID);
+        String replier = userService.findUserById(replierId).getUserName();
+
+        CommentVO commentVO = new CommentVO();
+        commentVO.setReplierId(replierId);
+        commentVO.setReplier(replier);
+        commentVO.setPostId(postId);
+        commentVO.setTime(LocalDateTime.now());
+        commentVO.setContent(content);
+        return messageService.addComment(commentVO);
+    }
 
     /**
      * utility function, find the intersection

@@ -1,6 +1,7 @@
 package org.businesslogic.messagebl;
 
 import org.util.ResultMessage;
+import org.vo.CommentVO;
 import org.vo.MessageVO;
 import org.vo.PrivateMessageVO;
 import org.vo.TagVO;
@@ -28,4 +29,10 @@ public interface MessageService {
     List<PrivateMessageVO> findSentMes(long senderId);
 
     List<PrivateMessageVO> findReceivedMes(long receiverId);
+
+    ResultMessage addComment(CommentVO commentVO);
+
+    CommentVO findCommentById(long commentId);
+
+    List<CommentVO> findCommentsByMessage(long messageId);
 }
