@@ -3,6 +3,7 @@ package org.security;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.util.ConstantString;
 import org.util.JsonUtil;
 import org.util.ResultMessage;
 
@@ -20,7 +21,7 @@ public class AjaxAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandle
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         //保存当前用户
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
-        request.getSession().setAttribute("userId", Long.parseLong(userId));
+        request.getSession().setAttribute(ConstantString.USER_ID, Long.parseLong(userId));
         response.setContentType("application/json; charset=utf-8");
         response.getWriter().print(JsonUtil.toJson(ResultMessage.SUCCESS));
     }
