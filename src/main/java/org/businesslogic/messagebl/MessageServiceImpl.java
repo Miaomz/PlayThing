@@ -1,6 +1,7 @@
 package org.businesslogic.messagebl;
 
 import org.data.messagedata.MessageDAO;
+import org.po.CommentPO;
 import org.po.MessagePO;
 import org.po.PrivateMessagePO;
 import org.po.TagPO;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.util.ResultMessage;
 import org.util.TransUtil;
+import org.vo.CommentVO;
 import org.vo.MessageVO;
 import org.vo.PrivateMessageVO;
 import org.vo.TagVO;
@@ -96,5 +98,23 @@ public class MessageServiceImpl implements MessageService {
         List<PrivateMessageVO> privateMessageVOS = new ArrayList<>(privateMessagePOS.size());
         privateMessagePOS.forEach(privateMessagePO -> privateMessageVOS.add(new PrivateMessageVO(privateMessagePO)));
         return privateMessageVOS;
+    }
+
+    @Override
+    public ResultMessage addComment(CommentVO commentVO) {
+        return messageDAO.addComment((CommentPO) commentVO.toPO());
+    }
+
+    @Override
+    public CommentVO findCommentById(long commentId) {
+        return new CommentVO(messageDAO.getCommentById(commentId));
+    }
+
+    @Override
+    public List<CommentVO> findCommentsByMessage(long messageId) {
+        List<CommentPO> commentPOS = messageDAO.getCommentByMessageId(messageId);
+        List<CommentVO> commentVOS = new ArrayList<>(commentPOS.size());
+        commentPOS.forEach(commentPO -> commentVOS.add(new CommentVO(commentPO)));
+        return commentVOS;
     }
 }
