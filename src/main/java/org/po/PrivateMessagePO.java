@@ -30,8 +30,6 @@ public class PrivateMessagePO implements PO {
 
     private boolean isDeleted;
 
-    private String title;
-
     private LocalDateTime time;
 
     private boolean isChecked;

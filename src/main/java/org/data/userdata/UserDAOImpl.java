@@ -1,6 +1,7 @@
 package org.data.userdata;
 
 import org.po.UserPO;
+import org.security.MD5Encrypt;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class UserDAOImpl implements UserDAO {
     @Transactional
     public ResultMessage addUser(UserPO user) {
         try {
+            user.setPassword(MD5Encrypt.md5(user.getPassword()));
             entityManager.persist(user);
         } catch (PersistenceException e){
             LoggerUtil.getLogger().info(e);
@@ -56,7 +58,7 @@ public class UserDAOImpl implements UserDAO {
     @Modifying
     public ResultMessage modifyUser(UserPO user) {
         try {
-            entityManager.merge(user);
+            entityManager.merge(user);//when we modify users, we can't just encrypt passwords
             entityManager.flush();
         } catch (PersistenceException e){
             LoggerUtil.getLogger().info(e);
@@ -72,18 +74,44 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     @SuppressWarnings("unchecked")
+    public UserPO findUserByName(String username) {
+        Query query = entityManager.createQuery("select u from UserPO u where u.name = :uname");
+        query.setParameter("uname", username);
+        List<UserPO> userPOS = query.getResultList();
+        if (userPOS == null || userPOS.isEmpty()){
+            return null;
+        } else {
+            return userPOS.get(0);
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<UserPO> findAllUsers() {
         Query query = entityManager.createQuery("select u from UserPO u");
         return query.getResultList();
     }
 
     @Override
-    public ResultMessage login(String password) {
-        return null;
+    public ResultMessage login(String username, String password) {
+        UserPO userPO = findUserByName(username);
+        if (userPO == null){
+            return ResultMessage.INEXISTENCE;
+        } else if (MD5Encrypt.md5(password).equals(userPO.getPassword())){
+            return ResultMessage.SUCCESS;
+        } else {
+            return ResultMessage.FAILURE;
+        }
     }
 
     @Override
-    public ResultMessage changePassword(String oldPassword, String newPassword) {
-        return null;
+    public ResultMessage changePassword(String username, String oldPassword, String newPassword) {
+        if (login(username, oldPassword) == ResultMessage.SUCCESS){
+            UserPO userPO = findUserByName(username);
+            userPO.setPassword(MD5Encrypt.md5(newPassword));
+            return modifyUser(userPO);
+        } else {
+            return ResultMessage.FAILURE;
+        }
     }
 }

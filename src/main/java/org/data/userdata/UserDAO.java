@@ -19,9 +19,11 @@ public interface UserDAO {
 
     UserPO findUserById(long userId);
 
+    UserPO findUserByName(String username);
+
     List<UserPO> findAllUsers();
 
-    ResultMessage login(String password);
+    ResultMessage login(String username, String password);
 
-    ResultMessage changePassword(String oldPassword, String newPassword);
+    ResultMessage changePassword(String username, String oldPassword, String newPassword);
 }

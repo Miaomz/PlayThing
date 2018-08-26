@@ -23,8 +23,6 @@ public class PrivateMessageVO implements VO{
 
     private long receiverId;
 
-    private String title;
-
     private LocalDateTime time;
 
     private boolean isChecked;
@@ -36,7 +34,6 @@ public class PrivateMessageVO implements VO{
         this.pmId = privateMessagePO.getPmId();
         this.senderId = privateMessagePO.getSenderId();
         this.receiverId = privateMessagePO.getReceiverId();
-        this.title = privateMessagePO.getTitle();
         this.content = privateMessagePO.getContent();
         this.time = privateMessagePO.getTime();
         this.isChecked = privateMessagePO.isChecked();
@@ -44,6 +41,6 @@ public class PrivateMessageVO implements VO{
 
     @Override
     public PO toPO() {
-        return new PrivateMessagePO(pmId, senderId, receiverId, false, title, time, isChecked, content);
+        return new PrivateMessagePO(pmId, senderId, receiverId, false, time, isChecked, content);
     }
 }
