@@ -62,12 +62,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResultMessage login(String password) {
-        return userDAO.login(password);
+    public ResultMessage login(String username,String password) {
+        return userDAO.login(username, password);
     }
 
     @Override
-    public ResultMessage changePassword(String oldPassword, String newPassword) {
-        return userDAO.changePassword(oldPassword, newPassword);
+    public ResultMessage changePassword(String username, String oldPassword, String newPassword) {
+        return userDAO.changePassword(username, oldPassword, newPassword);
     }
 }

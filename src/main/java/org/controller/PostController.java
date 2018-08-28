@@ -1,5 +1,7 @@
 package org.controller;
 
+import org.businesslogic.messagebl.MessageService;
+import org.businesslogic.shoppingbl.ShoppingService;
 import org.businesslogic.tagbl.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.util.ConstantString.SLASH;
@@ -29,11 +32,22 @@ import static org.util.ConstantString.USER_ID;
 public class PostController {
 
     private TagService tagService;
+    private ShoppingService shoppingService;
+    private MessageService messageService;
 
     @Autowired
     public void setTagService(TagService tagService) {
         this.tagService = tagService;
     }
+    @Autowired
+    public void setShoppingService(ShoppingService shoppingService) {
+        this.shoppingService = shoppingService;
+    }
+    @Autowired
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
 
     /**
      * 分享一篇笔记,成功返回'SUCCESS’, 后端需要设置writer为当前登录用户, 设置一个唯一标识id
@@ -55,18 +69,64 @@ public class PostController {
         }
     }
 
+    /**
+     * get post by ID
+     * @param request includes postID
+     * @param response includes Post's json String
+     */
     @RequestMapping("/get_post")
     public void getPost(HttpServletRequest request, HttpServletResponse response){
         long postID = Long.parseLong(request.getParameter("postID"));
         //TODO
     }
 
+    /**
+     * 得到作者最近几篇分享的笔记
+     * @param request includes writer
+     * @param response 返回post[]，数组的长度不超过5
+     */
     @RequestMapping("/get_recent_posts")
     public void getRecentPosts(HttpServletRequest request, HttpServletResponse response){
         long writerId = Long.parseLong(request.getParameter("writer"));
         //TODO
     }
 
+    public void getStatePosts(HttpServletRequest request, HttpServletResponse response){
+        long writerId = Long.parseLong(request.getParameter("writer"));
+        String state = request.getParameter("state");
+
+        State status;
+        switch (state){
+            case "pass":
+                status = State.PERMITTED;
+                break;
+            case "fail":
+                status = State.DENIED;
+                break;
+            case "uncheck":
+                status = State.WAITING;
+                break;
+            case "highlight":
+                status = State.RECOMMENDED;
+                break;
+
+                default:
+                    LoggerUtil.getLogger().info(new Exception("unknown state enum"));
+                    return;
+        }
+
+        List<CommodityVO> commodityVOS = shoppingService.findAllCommodities();
+        commodityVOS.removeIf(commodityVO -> commodityVO.getWriter() != writerId || commodityVO.getStatus() != status);
+        List<MessageVO> messageVOS = messageService.findAllMessages();
+        messageVOS.removeIf(messageVO -> messageVO.getWriter() != writerId || messageVO.getStatus() != status);
+
+
+    }
+
+
+    /**
+     * add post as message
+     */
     private ResultMessage addMessage(long writerId, String title, List<MultipartFile> covers, MultipartFile video, String fileType, List<String> tags, String content){
         MessageVO messageVO = new MessageVO();
         messageVO.setWriter(writerId);
@@ -88,6 +148,9 @@ public class PostController {
         return ResultMessage.SUCCESS;
     }
 
+    /**
+     * add post as commodity
+     */
     private ResultMessage addCommodity(long writerId, String title, List<MultipartFile> covers, MultipartFile video, String fileType, List<String> tags, double price, String content){
         CommodityVO commodityVO = new CommodityVO();
         commodityVO.setWriter(writerId);
@@ -144,10 +207,20 @@ public class PostController {
         return PathUtil.imageContextPath + SLASH + "videos" + SLASH + video.getOriginalFilename();
     }
 
-
+    /**
+     * get tagVOs by tag content in batch
+     * @param tags list of tags' content
+     * @return  list of tagVO
+     */
     private List<TagVO> getTagsInBatch(List<String> tags){
         List<TagVO> tagVOs = new ArrayList<>(tags.size());
         tags.forEach(tag -> tagVOs.add(tagService.findTagByContent(tag)));
         return tagVOs;
+    }
+
+    public static void main(String[] args){
+        MessageVO messageVO1 = new MessageVO();
+        MessageVO messageVO2 = new MessageVO();
+        System.out.println(JsonUtil.toJson(new ArrayList<>(Arrays.asList(messageVO1, messageVO2))));
     }
 }

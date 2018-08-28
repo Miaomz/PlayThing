@@ -17,7 +17,7 @@ public interface UserService {
 
     UserVO findUserById(long userId);
 
-    ResultMessage login(String password);
+    ResultMessage login(String username, String password);
 
-    ResultMessage changePassword(String oldPassword, String newPassword);
+    ResultMessage changePassword(String username, String oldPassword, String newPassword);
 }

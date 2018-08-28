@@ -22,6 +22,8 @@ public interface MessageService {
 
     MessageVO findMessageById(long mid);
 
+    List<MessageVO> findAllMessages();
+
     List<MessageVO> findMessageByTag(TagVO tag);
 
     ResultMessage sendPrivateMes(PrivateMessageVO pm);
