@@ -33,7 +33,7 @@ public class CommentVO implements VO{
 
     private String content;
 
-    public static final ClassType TYPE = ClassType.COMMENT;
+    private ClassType type = ClassType.COMMENT;
 
 
     public CommentVO(CommentPO commentPO){

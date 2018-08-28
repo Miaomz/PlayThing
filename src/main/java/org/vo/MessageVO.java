@@ -43,7 +43,7 @@ public class MessageVO implements VO {
 
     private State status;
 
-    public static final ClassType TYPE = ClassType.MESSAGE;
+    private ClassType type = ClassType.MESSAGE;
 
 
     public MessageVO(MessagePO messagePO){

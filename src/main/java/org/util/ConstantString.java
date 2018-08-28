@@ -8,4 +8,6 @@ public class ConstantString {
     private ConstantString() {}
 
     public static final String USER_ID = "userId";
+
+    public static final String SLASH = "/";
 }
