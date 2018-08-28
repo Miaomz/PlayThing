@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableScheduling
 @SpringBootApplication
 @RestController
-@EntityScan(basePackages = "org.po")
+@EntityScan(basePackages = "org.application.po")
 public class PlaythingApplication extends SpringBootServletInitializer{
 
     @Override
