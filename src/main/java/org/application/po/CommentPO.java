@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -20,6 +18,7 @@ import java.time.LocalDateTime;
 public class CommentPO implements PO{
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long commentId;
 
     private boolean isDeleted;

@@ -18,7 +18,7 @@ import java.util.List;
 public class UserPO implements PO {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
 
     @Column(unique = true, nullable = false, length = 32)

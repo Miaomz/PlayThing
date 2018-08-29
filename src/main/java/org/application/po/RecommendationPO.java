@@ -19,7 +19,7 @@ import java.util.List;
 public class RecommendationPO implements PO{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long rid;
 
     @Column(length = 2048)

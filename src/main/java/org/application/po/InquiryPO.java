@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.application.util.State;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author miaomuzhi
@@ -20,7 +17,7 @@ import javax.persistence.Id;
 @Entity
 public class InquiryPO implements PO {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long inquiryId;
     @Column(nullable = false)
     private long senderId;

@@ -21,7 +21,7 @@ import java.util.List;
 public class MessagePO implements PO {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long messageId;
 
     private long userId;

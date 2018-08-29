@@ -21,7 +21,7 @@ import java.util.List;
 public class CommodityPO implements PO{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long cid;
 
     private long vendorId;

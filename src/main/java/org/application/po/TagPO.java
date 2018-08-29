@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class TagPO implements PO {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long tagId;
 
     private boolean isDeleted;
