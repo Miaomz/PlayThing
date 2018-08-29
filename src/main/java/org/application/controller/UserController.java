@@ -3,7 +3,6 @@ package org.application.controller;
 import org.application.businesslogic.tagbl.TagService;
 import org.application.businesslogic.userbl.UserService;
 import org.application.po.UserPO;
-import org.application.security.MD5Encrypt;
 import org.application.security.MyUserDetails;
 import org.application.util.FileUtil;
 import org.application.util.LoggerUtil;
@@ -69,7 +68,7 @@ public class UserController {
                                   @RequestParam String location, @RequestParam String mail, @RequestParam String phone, @RequestParam String[] tags){
         UserVO userVO = new UserVO();
         userVO.setUserName(userName);
-        userVO.setPassword(MD5Encrypt.md5(password));
+        userVO.setPassword(password);
         userVO.setDisplay(uploadAvatar(userName, avatar));
         userVO.setLocation(location);
         userVO.setMail(mail);
