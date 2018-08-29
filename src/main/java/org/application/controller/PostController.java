@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.application.util.ConstantString.*;
@@ -56,14 +57,15 @@ public class PostController {
     @RequestMapping("/share_post")
     public ResultMessage sharePost(@RequestParam String title, @RequestParam MultipartFile[] covers,
                                    @RequestParam MultipartFile video, @RequestParam PostType fileType,
-                                   @RequestParam List<String> tags, @RequestParam double price,
+                                   @RequestParam String[] tags, @RequestParam double price,
                                    @RequestParam String type, @RequestParam String content,
                                    HttpSession session){
+        saveTags(Arrays.asList(tags));
 
         if (type.equals(SHARE)){
-            return addMessage((Long) session.getAttribute(USER_ID), title, Arrays.asList(covers), video, fileType, tags, content);
+            return addMessage((Long) session.getAttribute(USER_ID), title, Arrays.asList(covers), video, fileType, Arrays.asList(tags), content);
         } else if (type.equals(SELL)){
-            return addCommodity((Long) session.getAttribute(USER_ID), title, Arrays.asList(covers), video, fileType, tags, price, content);
+            return addCommodity((Long) session.getAttribute(USER_ID), title, Arrays.asList(covers), video, fileType, Arrays.asList(tags), price, content);
         } else {
             LoggerUtil.getLogger().info(new Exception("an unknown type"));
             return ResultMessage.FAILURE;
@@ -207,6 +209,8 @@ public class PostController {
      */
     @RequestMapping("/receive_posts")
     public List<MessageVO> receivePosts(@RequestParam String tag){
+        saveTags(Collections.singletonList(tag));
+
         TagVO tagVO = tagService.findTagByContent(tag);
         return messageService.findMessageByTag(tagVO);
     }
@@ -218,6 +222,8 @@ public class PostController {
      */
     @RequestMapping("/receive_commodities")
     public List<CommodityVO> receiveCommodities(@RequestParam String tag){
+        saveTags(Collections.singletonList(tag));
+
         List<CommodityVO> commodityVOS = shoppingService.findAllCommodities();
         commodityVOS.removeIf(commodityVO -> {
             boolean isNotIncluded = true;
@@ -319,6 +325,8 @@ public class PostController {
      * @return  list of tagVO
      */
     private List<TagVO> getTagsInBatch(List<String> tags){
+        saveTags(tags);
+
         List<TagVO> tagVOs = new ArrayList<>(tags.size());
         tags.forEach(tag -> tagVOs.add(tagService.findTagByContent(tag)));
         return tagVOs;
@@ -333,6 +341,16 @@ public class PostController {
         sum.addAll(commodityVOS);
         sum.addAll(messageVOS);
         return sum;
+    }
+
+    private void saveTags(List<String> tags){
+        tags.forEach(tag -> {
+            if (tagService.findTagByContent(tag) == null){
+                TagVO tagVO = new TagVO();
+                tagVO.setContent(tag);
+                tagService.addTag(tagVO);
+            }
+        });
     }
 
     public static void main(String[] args){
