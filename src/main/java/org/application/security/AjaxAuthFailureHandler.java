@@ -16,9 +16,9 @@ public class AjaxAuthFailureHandler extends SimpleUrlAuthenticationFailureHandle
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        ResultMessage message = ResultMessage.valueOf(exception.getMessage());
+        //ResultMessage message = ResultMessage.valueOf(exception.getMessage());
         response.setContentType("application/json; charset=utf-8");
-        response.getWriter().print(JsonUtil.toJson(message));
+        response.getWriter().print(JsonUtil.toJson(ResultMessage.FAILURE));
     }
 
 }
