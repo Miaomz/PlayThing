@@ -54,18 +54,18 @@ public class PostController {
      * 分享一篇笔记,成功返回'SUCCESS’, 后端需要设置writer为当前登录用户, 设置一个唯一标识id
      */
     @RequestMapping("/share_post")
-    public ResultMessage sharePost(@RequestParam String title, @RequestParam List<MultipartFile> covers,
+    public ResultMessage sharePost(@RequestParam String title, @RequestParam MultipartFile[] covers,
                                    @RequestParam MultipartFile video, @RequestParam PostType fileType,
                                    @RequestParam List<String> tags, @RequestParam double price,
                                    @RequestParam String type, @RequestParam String content,
                                    HttpSession session){
 
         if (type.equals(SHARE)){
-            return addMessage((Long) session.getAttribute(USER_ID), title, covers, video, fileType, tags, content);
+            return addMessage((Long) session.getAttribute(USER_ID), title, Arrays.asList(covers), video, fileType, tags, content);
         } else if (type.equals(SELL)){
-            return addCommodity((Long) session.getAttribute(USER_ID), title, covers, video, fileType, tags, price, content);
+            return addCommodity((Long) session.getAttribute(USER_ID), title, Arrays.asList(covers), video, fileType, tags, price, content);
         } else {
-            LoggerUtil.getLogger().info(new Exception("unknown type"));
+            LoggerUtil.getLogger().info(new Exception("an unknown type"));
             return ResultMessage.FAILURE;
         }
     }

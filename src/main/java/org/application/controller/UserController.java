@@ -25,11 +25,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static org.application.util.ConstantString.SLASH;
-import static org.application.util.ConstantString.USER_ID;
+import static org.application.util.ConstantString.*;
 
 /**
  * @author miaomuzhi
@@ -60,10 +60,13 @@ public class UserController {
         }
     }
 
+    /**
+     * 返回的是id 如果注册失败就返回负数
+     */
     @RequestMapping("/register")
-    public ResultMessage register(HttpServletRequest request, HttpServletResponse response,
-                                  @RequestParam String userName, @RequestParam String password, @RequestParam MultipartFile avatar,
-                                  @RequestParam String location, @RequestParam String mail, @RequestParam String phone, @RequestParam List<String> tags){
+    public long register(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestParam String userName, @RequestParam String password, @RequestParam(required = false) MultipartFile avatar,
+                                  @RequestParam String location, @RequestParam String mail, @RequestParam String phone, @RequestParam String[] tags){
         UserVO userVO = new UserVO();
         userVO.setUserName(userName);
         userVO.setPassword(MD5Encrypt.md5(password));
@@ -71,7 +74,9 @@ public class UserController {
         userVO.setLocation(location);
         userVO.setMail(mail);
         userVO.setPhone(phone);
-        userVO.setTags(getTagVOsInBatch(tags));
+        userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
+
+        userVO.setRole(ROLE_USER);
 
         ResultMessage resultMessage = userService.addUser(userVO);
 
@@ -84,13 +89,13 @@ public class UserController {
                 token.setDetails(new WebAuthenticationDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(token);
                 request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-                request.getSession().setAttribute(USER_ID, userVO.getUserId());
+                request.getSession().setAttribute(USER_ID, userService.findUserByName(userName).getUserId());
                 response.setStatus(HttpServletResponse.SC_OK);
             } else response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         } catch (Exception e) {
             LoggerUtil.getLogger().info(e);
         }
-        return resultMessage;
+        return (resultMessage==ResultMessage.SUCCESS) ? userService.findUserByName(userName).getUserId() : -1;
     }
 
     @RequestMapping("/get_user")
@@ -99,9 +104,9 @@ public class UserController {
     }
 
     @RequestMapping("/editPerInfo")
-    public ResultMessage editPersonInfo(@RequestParam String userName, @RequestParam MultipartFile avatar,
+    public ResultMessage editPersonInfo(@RequestParam String userName, @RequestParam(required = false) MultipartFile avatar,
                                         @RequestParam String location, @RequestParam String mail,
-                                        @RequestParam String phone, @RequestParam List<String> tags){
+                                        @RequestParam String phone, @RequestParam String[] tags){
         UserVO userVO = userService.findUserByName(userName);
         if (userVO == null){
             return ResultMessage.FAILURE;
@@ -111,11 +116,15 @@ public class UserController {
         userVO.setMail(mail);
         userVO.setPhone(phone);
         userVO.setDisplay(uploadAvatar(userName, avatar));
-        userVO.setTags(getTagVOsInBatch(tags));
+        userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
         return userService.modifyUser(userVO);
     }
 
     private String uploadAvatar(String userName, MultipartFile avatar){
+        if (avatar == null) {
+            return null;
+        }
+
         String dirPath = PathUtil.imageUploadPath + SLASH + "avatars" + SLASH + userName;
         if (FileUtil.uploadImage(avatar, dirPath) == ResultMessage.FAILURE){
             LoggerUtil.getLogger().info(new Exception("upload avatar failed"));

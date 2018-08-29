@@ -14,4 +14,6 @@ public class ConstantString {
     public static final String SELL = "SELL";
 
     public static final String SHARE = "SHARE";
+
+    public static final String ROLE_USER = "ROLE_USER";
 }
