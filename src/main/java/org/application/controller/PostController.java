@@ -8,9 +8,9 @@ import org.application.vo.CommodityVO;
 import org.application.vo.MessageVO;
 import org.application.vo.TagVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ import static org.application.util.PostType.VIDEO;
  * @author miaomuzhi
  * @since 2018/8/27
  */
-@Controller
+@RestController
 public class PostController {
 
     private TagService tagService;

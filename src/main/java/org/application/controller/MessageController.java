@@ -6,9 +6,9 @@ import org.application.util.ResultMessage;
 import org.application.vo.CommentVO;
 import org.application.vo.PrivateMessageVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ import static org.application.util.ConstantString.USER_ID;
  * @author miaomuzhi
  * @since 2018/7/19
  */
-@Controller
+@RestController
 public class MessageController {
 
     private MessageService messageService;
