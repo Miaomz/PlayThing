@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.application.util.ConstantString.SLASH;
-import static org.application.util.ConstantString.USER_ID;
+import static org.application.util.ConstantString.*;
 import static org.application.util.PostType.PIC;
 import static org.application.util.PostType.VIDEO;
 
@@ -61,9 +60,9 @@ public class PostController {
                                    @RequestParam String type, @RequestParam String content,
                                    HttpSession session){
 
-        if (type.equals("SHARE")){
+        if (type.equals(SHARE)){
             return addMessage((Long) session.getAttribute(USER_ID), title, covers, video, fileType, tags, content);
-        } else if (type.equals("SELL")){
+        } else if (type.equals(SELL)){
             return addCommodity((Long) session.getAttribute(USER_ID), title, covers, video, fileType, tags, price, content);
         } else {
             LoggerUtil.getLogger().info(new Exception("unknown type"));
@@ -79,7 +78,24 @@ public class PostController {
     @RequestMapping("/get_post")
     public void getPost(HttpServletRequest request, HttpServletResponse response){
         long postID = Long.parseLong(request.getParameter("postID"));
-        //TODO
+        String type = request.getParameter("type");
+        switch (type){
+            case SELL:
+                CommodityVO commodityVO = shoppingService.findCommodityById(postID);
+                if (commodityVO != null) {
+                    JsonSendUtil.sendJson2Browser(JsonUtil.toJson(commodityVO), response);
+                }
+                break;
+            case SHARE:
+                MessageVO messageVO = messageService.findMessageById(postID);
+                if (messageVO != null){
+                    JsonSendUtil.sendJson2Browser(JsonUtil.toJson(messageVO), response);
+                }
+                break;
+
+                default:
+                    LoggerUtil.getLogger().info(new Exception("unknown type"));
+        }
     }
 
     /**
@@ -89,8 +105,27 @@ public class PostController {
      * @return 审核成功返回'SUCCESS'
      */
     @RequestMapping("/check_post")
-    public ResultMessage checkPost(@RequestParam String checkResult, @RequestParam long postID){
-        //TODO
+    public ResultMessage checkPost(@RequestParam State checkResult, @RequestParam long postID, @RequestParam String type){
+        switch (type){
+            case SELL:
+                CommodityVO commodityVO = shoppingService.findCommodityById(postID);
+                if (commodityVO != null){
+                    commodityVO.setStatus(checkResult);
+                    return shoppingService.modifyCommodity(commodityVO);
+                }
+                break;
+            case SHARE:
+                MessageVO messageVO = messageService.findMessageById(postID);
+                if (messageVO != null){
+                    messageVO.setStatus(checkResult);
+                    return messageService.modifyMessage(messageVO);
+                }
+                break;
+
+                default:
+                    LoggerUtil.getLogger().info(new Exception("unknown type"));
+                    break;
+        }
         return ResultMessage.FAILURE;
     }
 
@@ -165,6 +200,37 @@ public class PostController {
 
     }
 
+    /**
+     * 按标签获取所有文章，返回post[]
+     * @param tag 标签
+     * @return list of posts
+     */
+    @RequestMapping("/receive_posts")
+    public List<MessageVO> receivePosts(@RequestParam String tag){
+        TagVO tagVO = tagService.findTagByContent(tag);
+        return messageService.findMessageByTag(tagVO);
+    }
+
+    /**
+     * 按标签获取所有商品，返回commodities[]
+     * @param tag 标签
+     * @return list of posts
+     */
+    @RequestMapping("/receive_commodities")
+    public List<CommodityVO> receiveCommodities(@RequestParam String tag){
+        List<CommodityVO> commodityVOS = shoppingService.findAllCommodities();
+        commodityVOS.removeIf(commodityVO -> {
+            boolean isNotIncluded = true;
+            for (TagVO vo : commodityVO.getTagVOS()) {
+                if (vo.getContent().equals(tag)){
+                    isNotIncluded = false;
+                    break;
+                }
+            }
+            return isNotIncluded;
+        });
+        return commodityVOS;
+    }
 
     /**
      * add post as message

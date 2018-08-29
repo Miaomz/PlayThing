@@ -62,6 +62,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserVO findUserByName(String username) {
+        UserPO userPO = userDAO.findUserByName(username);
+        if (userPO != null && !userPO.isDeleted()){
+            return new UserVO(userPO);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public ResultMessage login(String username,String password) {
         return userDAO.login(username, password);
     }
