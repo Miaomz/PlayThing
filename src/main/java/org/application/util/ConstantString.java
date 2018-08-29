@@ -10,4 +10,8 @@ public class ConstantString {
     public static final String USER_ID = "userId";
 
     public static final String SLASH = "/";
+
+    public static final String SELL = "SELL";
+
+    public static final String SHARE = "SHARE";
 }

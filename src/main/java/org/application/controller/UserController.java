@@ -1,15 +1,34 @@
 package org.application.controller;
 
+import org.application.businesslogic.tagbl.TagService;
 import org.application.businesslogic.userbl.UserService;
+import org.application.po.UserPO;
+import org.application.security.MD5Encrypt;
+import org.application.security.MyUserDetails;
+import org.application.util.FileUtil;
+import org.application.util.LoggerUtil;
+import org.application.util.PathUtil;
 import org.application.util.ResultMessage;
+import org.application.vo.TagVO;
 import org.application.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
+import static org.application.util.ConstantString.SLASH;
 import static org.application.util.ConstantString.USER_ID;
 
 /**
@@ -20,10 +39,15 @@ import static org.application.util.ConstantString.USER_ID;
 public class UserController {
 
     private UserService userService;
+    private TagService tagService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+    @Autowired
+    public void setTagService(TagService tagService) {
+        this.tagService = tagService;
     }
 
     @RequestMapping("/current_user")
@@ -37,13 +61,74 @@ public class UserController {
     }
 
     @RequestMapping("/register")
-    public ResultMessage register(){
-        //TODO
-        return null;
+    public ResultMessage register(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestParam String userName, @RequestParam String password, @RequestParam MultipartFile avatar,
+                                  @RequestParam String location, @RequestParam String mail, @RequestParam String phone, @RequestParam List<String> tags){
+        UserVO userVO = new UserVO();
+        userVO.setUserName(userName);
+        userVO.setPassword(MD5Encrypt.md5(password));
+        userVO.setDisplay(uploadAvatar(userName, avatar));
+        userVO.setLocation(location);
+        userVO.setMail(mail);
+        userVO.setPhone(phone);
+        userVO.setTags(getTagVOsInBatch(tags));
+
+        ResultMessage resultMessage = userService.addUser(userVO);
+
+        try {
+            if (resultMessage == ResultMessage.SUCCESS) {
+                //实现自动登录
+                MyUserDetails userDetails = new MyUserDetails((UserPO) userVO.toPO());
+                //经过认证的token，伪造
+                UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+                token.setDetails(new WebAuthenticationDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(token);
+                request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+                request.getSession().setAttribute(USER_ID, userVO.getUserId());
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        } catch (Exception e) {
+            LoggerUtil.getLogger().info(e);
+        }
+        return resultMessage;
     }
 
     @RequestMapping("/get_user")
     public UserVO getUser(@RequestParam long user){
         return userService.findUserById(user);
+    }
+
+    @RequestMapping("/editPerInfo")
+    public ResultMessage editPersonInfo(@RequestParam String userName, @RequestParam MultipartFile avatar,
+                                        @RequestParam String location, @RequestParam String mail,
+                                        @RequestParam String phone, @RequestParam List<String> tags){
+        UserVO userVO = userService.findUserByName(userName);
+        if (userVO == null){
+            return ResultMessage.FAILURE;
+        }
+
+        userVO.setLocation(location);
+        userVO.setMail(mail);
+        userVO.setPhone(phone);
+        userVO.setDisplay(uploadAvatar(userName, avatar));
+        userVO.setTags(getTagVOsInBatch(tags));
+        return userService.modifyUser(userVO);
+    }
+
+    private String uploadAvatar(String userName, MultipartFile avatar){
+        String dirPath = PathUtil.imageUploadPath + SLASH + "avatars" + SLASH + userName;
+        if (FileUtil.uploadImage(avatar, dirPath) == ResultMessage.FAILURE){
+            LoggerUtil.getLogger().info(new Exception("upload avatar failed"));
+            return null;
+        } else {
+            return PathUtil.imageContextPath + SLASH + "avatars" + SLASH + userName + SLASH + avatar.getOriginalFilename();
+        }
+    }
+
+    private List<TagVO> getTagVOsInBatch(List<String> tagIds){
+        List<TagVO> tagVOS = new ArrayList<>(tagIds.size());
+        tagIds.forEach(tag -> tagVOS.add(tagService.findTagByContent(tag)));
+        tagVOS.removeIf(Objects::isNull);
+        return tagVOS;
     }
 }
