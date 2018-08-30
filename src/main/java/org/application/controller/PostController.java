@@ -188,6 +188,22 @@ public class PostController {
     }
 
     /**
+     * 根据标签返回对应的全部一期一会文章
+     * @param kind 标签
+     * @return posts
+     */
+    @RequestMapping("/showArticle")
+    public List<MessageVO> showArticle(@RequestParam String kind){
+        if (tagService.findTagByContent(kind) == null){
+            return new ArrayList<>();
+        }
+
+        List<MessageVO> messageVOS = messageService.findMessageByTag(tagService.findTagByContent(kind));
+        messageVOS.removeIf(messageVO -> messageVO.getStatus() != State.RECOMMENDED);
+        return messageVOS;
+    }
+
+    /**
      * 按状态获取所有笔记
      * @param request status, State
      * @param response  list of posts
@@ -214,6 +230,7 @@ public class PostController {
         TagVO tagVO = tagService.findTagByContent(tag);
         return messageService.findMessageByTag(tagVO);
     }
+
 
     /**
      * 按标签获取所有商品，返回commodities[]

@@ -31,8 +31,6 @@ public class MessageVO implements VO {
 
     private PostType postType;
 
-    private List<String> pic;
-
     private String video;
 
     private List<String> covers;
@@ -50,7 +48,6 @@ public class MessageVO implements VO {
         this.messageId = messagePO.getMessageId();
         this.writer = messagePO.getUserId();
         this.postType = messagePO.getPostType();
-        this.pic = messagePO.getPic();
         this.video = messagePO.getVideo();
         this.covers = messagePO.getCovers();
         this.title = messagePO.getTitle();
@@ -64,6 +61,6 @@ public class MessageVO implements VO {
 
     @Override
     public PO toPO() {
-        return new MessagePO(messageId, writer, TransUtil.toPOList(tags), postType, pic, video, covers, title, content, false, status);
+        return new MessagePO(messageId, writer, TransUtil.toPOList(tags), postType, video, covers, title, content, false, status);
     }
 }

@@ -3,6 +3,7 @@ package org.application.controller;
 import org.application.businesslogic.tagbl.TagService;
 import org.application.businesslogic.userbl.UserService;
 import org.application.po.UserPO;
+import org.application.security.MD5Encrypt;
 import org.application.security.MyUserDetails;
 import org.application.util.FileUtil;
 import org.application.util.LoggerUtil;
@@ -120,6 +121,26 @@ public class UserController {
         userVO.setDisplay(uploadAvatar(userName, avatar));
         userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
         return userService.modifyUser(userVO);
+    }
+
+    @RequestMapping("/adminLogin")
+    public ResultMessage adminLogin(@RequestParam String userName, @RequestParam String password, HttpServletRequest request){
+        UserVO userVO = userService.findUserByName(userName);
+        if (userVO == null){
+            return ResultMessage.INEXISTENCE;
+        }
+
+        if (userVO.getPassword().equals(MD5Encrypt.md5(password))){
+            MyUserDetails userDetails = new MyUserDetails((UserPO) userVO.toPO());
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+            token.setDetails(new WebAuthenticationDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(token);
+            request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            request.getSession().setAttribute(USER_ID, userService.findUserByName(userName).getUserId());
+            return ResultMessage.SUCCESS;
+        } else {
+            return ResultMessage.WRONG_PASS;
+        }
     }
 
     private String uploadAvatar(String userName, MultipartFile avatar){

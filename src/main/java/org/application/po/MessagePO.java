@@ -35,16 +35,13 @@ public class MessagePO implements PO {
     private PostType postType;
 
     /**
-     * 嵌入图片的url列表；若postType为video，则无意义
-     */
-    @ElementCollection
-    private List<String> pic;
-
-    /**
      * 嵌入视频的url；若postType为pic，则无意义
      */
     private String video;
 
+    /**
+     * 嵌入图片的url列表；若postType为video，则无意义
+     */
     @ElementCollection
     private List<String> covers;
 

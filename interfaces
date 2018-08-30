@@ -27,6 +27,16 @@ article：{“title”:’’,
 url：/showArticle
 （注：前端分配工作时好像没有分配关于发布“一期一会”文章的界面，会尽快补上）
 
+修改：
+article新增两个属性：fileType和video
+即：article：{“title”:’’,
+“src”:’’,
+“fileType”:’’,
+“video”:null,
+“id”:’’}
+fileType表示文章是图片还是视频 PIC表示图片，VID表示video
+video表示视频文件，和王川源的getpost里面的视频文件一样
+
 
 4.
 要求：根据提交的表单数据，实现管理员登录（普通用户和管理员采用不同登录页面，区分开来）
