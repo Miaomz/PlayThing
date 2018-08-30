@@ -3,7 +3,6 @@ package org.application.controller;
 import org.application.businesslogic.tagbl.TagService;
 import org.application.businesslogic.userbl.UserService;
 import org.application.po.UserPO;
-import org.application.security.MD5Encrypt;
 import org.application.security.MyUserDetails;
 import org.application.util.FileUtil;
 import org.application.util.LoggerUtil;
@@ -130,7 +129,7 @@ public class UserController {
             return ResultMessage.INEXISTENCE;
         }
 
-        if (userVO.getPassword().equals(MD5Encrypt.md5(password))){
+        if (userVO.getPassword().equals(password)){
             MyUserDetails userDetails = new MyUserDetails((UserPO) userVO.toPO());
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
             token.setDetails(new WebAuthenticationDetails(request));
