@@ -258,7 +258,7 @@ public class PostController {
             LoggerUtil.getLogger().warning(new Exception("unknown fileType"));
             return ResultMessage.FAILURE;
         }
-        return ResultMessage.SUCCESS;
+        return messageService.addMessage(messageVO);
     }
 
     /**
@@ -283,7 +283,7 @@ public class PostController {
             LoggerUtil.getLogger().warning(new Exception("unknown fileType"));
             return ResultMessage.FAILURE;
         }
-        return ResultMessage.SUCCESS;
+        return shoppingService.addCommodity(commodityVO);
     }
 
     /**
