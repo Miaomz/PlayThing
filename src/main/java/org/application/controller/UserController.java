@@ -66,6 +66,8 @@ public class UserController {
     public long register(HttpServletRequest request, HttpServletResponse response,
                                   @RequestParam String userName, @RequestParam String password, @RequestParam(required = false) MultipartFile avatar,
                                   @RequestParam String location, @RequestParam String mail, @RequestParam String phone, @RequestParam String[] tags){
+        saveTags(Arrays.asList(tags));
+
         UserVO userVO = new UserVO();
         userVO.setUserName(userName);
         userVO.setPassword(password);
@@ -106,6 +108,8 @@ public class UserController {
     public ResultMessage editPersonInfo(@RequestParam String userName, @RequestParam(required = false) MultipartFile avatar,
                                         @RequestParam String location, @RequestParam String mail,
                                         @RequestParam String phone, @RequestParam String[] tags){
+        saveTags(Arrays.asList(tags));
+
         UserVO userVO = userService.findUserByName(userName);
         if (userVO == null){
             return ResultMessage.FAILURE;
@@ -139,4 +143,15 @@ public class UserController {
         tagVOS.removeIf(Objects::isNull);
         return tagVOS;
     }
+
+    private void saveTags(List<String> tags){
+        tags.forEach(tag -> {
+            if (tagService.findTagByContent(tag) == null){
+                TagVO tagVO = new TagVO();
+                tagVO.setContent(tag);
+                tagService.addTag(tagVO);
+            }
+        });
+    }
+
 }

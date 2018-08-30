@@ -55,9 +55,9 @@ public class PostController {
      * 分享一篇笔记,成功返回'SUCCESS’, 后端需要设置writer为当前登录用户, 设置一个唯一标识id
      */
     @RequestMapping("/share_post")
-    public ResultMessage sharePost(@RequestParam String title, @RequestParam MultipartFile[] covers,
-                                   @RequestParam MultipartFile video, @RequestParam PostType fileType,
-                                   @RequestParam String[] tags, @RequestParam double price,
+    public ResultMessage sharePost(@RequestParam String title, @RequestParam(required = false) MultipartFile[] covers,
+                                   @RequestParam(required = false) MultipartFile video, @RequestParam PostType fileType,
+                                   @RequestParam String[] tags, @RequestParam(required = false) double price,
                                    @RequestParam String type, @RequestParam String content,
                                    HttpSession session){
         saveTags(Arrays.asList(tags));
