@@ -33,7 +33,7 @@ public class CommentVO implements VO{
 
     private String content;
 
-    private ClassType type = ClassType.COMMENT;
+    private ClassType type;
 
 
     public CommentVO(CommentPO commentPO){
@@ -43,11 +43,12 @@ public class CommentVO implements VO{
         this.replier = commentPO.getReplier();
         this.time = commentPO.getTime();
         this.content = commentPO.getContent();
+        this.type = commentPO.getType();
     }
 
     @Override
     public PO toPO() {
-        return new CommentPO(commentId, false, postId, replierId, replier, time, content);
+        return new CommentPO(commentId, false, postId, replierId, replier, time, content, type);
     }
 
 }

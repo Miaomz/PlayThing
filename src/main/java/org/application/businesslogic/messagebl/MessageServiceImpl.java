@@ -5,6 +5,7 @@ import org.application.po.CommentPO;
 import org.application.po.MessagePO;
 import org.application.po.PrivateMessagePO;
 import org.application.po.TagPO;
+import org.application.util.ClassType;
 import org.application.util.ResultMessage;
 import org.application.util.TransUtil;
 import org.application.vo.CommentVO;
@@ -120,7 +121,19 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public List<CommentVO> findCommentsByMessage(long messageId) {
-        List<CommentPO> commentPOS = messageDAO.getCommentByMessageId(messageId);
+        List<CommentPO> commentPOS = messageDAO.getCommentByPostId(messageId);
+        commentPOS.removeIf(commentPO -> commentPO.getType() != ClassType.SHARE);
+
+        List<CommentVO> commentVOS = new ArrayList<>(commentPOS.size());
+        commentPOS.forEach(commentPO -> commentVOS.add(new CommentVO(commentPO)));
+        return commentVOS;
+    }
+
+    @Override
+    public List<CommentVO> findCommentByCommodity(long commodityId) {
+        List<CommentPO> commentPOS = messageDAO.getCommentByPostId(commodityId);
+        commentPOS.removeIf(commentPO -> commentPO.getType() != ClassType.SELL);
+
         List<CommentVO> commentVOS = new ArrayList<>(commentPOS.size());
         commentPOS.forEach(commentPO -> commentVOS.add(new CommentVO(commentPO)));
         return commentVOS;

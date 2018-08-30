@@ -2,6 +2,7 @@ package org.application.controller;
 
 import org.application.businesslogic.messagebl.MessageService;
 import org.application.businesslogic.userbl.UserService;
+import org.application.util.ClassType;
 import org.application.util.ResultMessage;
 import org.application.vo.CommentVO;
 import org.application.vo.PrivateMessageVO;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static org.application.util.ClassType.SHARE;
 import static org.application.util.ConstantString.USER_ID;
 
 /**
@@ -118,12 +120,15 @@ public class MessageController {
     }
 
     @RequestMapping("/get_comment")
-    public List<CommentVO> getComments(@RequestParam long postId){
-        return messageService.findCommentsByMessage(postId);
+    public List<CommentVO> getComments(@RequestParam long postId, @RequestParam ClassType type){
+        if (type == SHARE)
+            return messageService.findCommentsByMessage(postId);
+        else
+            return messageService.findCommentByCommodity(postId);
     }
 
     @RequestMapping("/share_comment")
-    public ResultMessage shareComment(@RequestParam long postId, @RequestParam String content, HttpSession session){
+    public ResultMessage shareComment(@RequestParam long postId, @RequestParam String content, @RequestParam ClassType type, HttpSession session){
         long replierId = (Long) session.getAttribute(USER_ID);
         String replier = userService.findUserById(replierId).getUserName();
 
@@ -132,6 +137,7 @@ public class MessageController {
         commentVO.setReplier(replier);
         commentVO.setPostId(postId);
         commentVO.setTime(LocalDateTime.now());
+        commentVO.setType(type);
         commentVO.setContent(content);
         return messageService.addComment(commentVO);
     }

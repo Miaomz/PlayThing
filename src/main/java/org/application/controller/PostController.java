@@ -233,7 +233,7 @@ public class PostController {
         commodityVOS.removeIf(commodityVO -> commodityVO.getStatus() != state);
         List<MessageVO> messageVOS = messageService.findAllMessages();
         messageVOS.removeIf(messageVO -> messageVO.getStatus() != state);
-
+        JsonSendUtil.sendJson2Browser(JsonUtil.toJson(mergePosts(messageVOS, commodityVOS)), response);
     }
 
     /**
