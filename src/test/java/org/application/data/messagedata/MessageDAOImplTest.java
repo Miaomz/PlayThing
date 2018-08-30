@@ -115,7 +115,7 @@ public class MessageDAOImplTest {
     public void getCommentByMessageId() {
         commentPO.setPostId(3);
         messageDAO.addComment(commentPO);
-        assertEquals("first comment of the first message", messageDAO.getCommentByMessageId(3).get(0).getContent());
+        assertEquals("first comment of the first message", messageDAO.getCommentByPostId(3).get(0).getContent());
     }
 
     @Test

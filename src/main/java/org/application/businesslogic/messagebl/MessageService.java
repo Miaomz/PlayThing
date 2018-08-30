@@ -37,4 +37,6 @@ public interface MessageService {
     CommentVO findCommentById(long commentId);
 
     List<CommentVO> findCommentsByMessage(long messageId);
+
+    List<CommentVO> findCommentByCommodity(long commodityId);
 }

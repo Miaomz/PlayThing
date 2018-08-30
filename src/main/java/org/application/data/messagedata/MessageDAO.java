@@ -27,7 +27,7 @@ public interface MessageDAO {
 
     CommentPO getCommentById(long commentId);
 
-    List<CommentPO> getCommentByMessageId(long messageId);
+    List<CommentPO> getCommentByPostId(long messageId);
 
     ResultMessage sendPrivateMes(PrivateMessagePO pm);
 

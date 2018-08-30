@@ -99,7 +99,7 @@ public class MessageDAOImpl implements MessageDAO {
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<CommentPO> getCommentByMessageId(long messageId) {
+    public List<CommentPO> getCommentByPostId(long messageId) {
         Query query = entityManager.createQuery("select c from CommentPO c where c.postId = :messageId");
         query.setParameter("messageId", messageId);
         return query.getResultList();

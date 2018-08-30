@@ -3,6 +3,7 @@ package org.application.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.application.util.ClassType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -38,4 +39,6 @@ public class CommentPO implements PO{
 
     @Column(length = 2048)
     private String content;
+
+    private ClassType type;
 }
