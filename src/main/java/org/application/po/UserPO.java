@@ -3,6 +3,7 @@ package org.application.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.application.util.TagsConverter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -44,7 +45,8 @@ public class UserPO implements PO {
 
     private double balance;
 
-    @OneToMany(targetEntity = TagPO.class)
+    @Lob
+    @Convert(converter = TagsConverter.class)
     private List<TagPO> tags;
 
 }
