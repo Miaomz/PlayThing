@@ -1,5 +1,6 @@
 package org.application.controller;
 
+import lombok.Data;
 import org.application.businesslogic.messagebl.MessageService;
 import org.application.businesslogic.shoppingbl.ShoppingService;
 import org.application.businesslogic.tagbl.TagService;
@@ -193,14 +194,31 @@ public class PostController {
      * @return posts
      */
     @RequestMapping("/showArticle")
-    public List<MessageVO> showArticle(@RequestParam String kind){
+    public List<Article> showArticle(@RequestParam String kind){
         if (tagService.findTagByContent(kind) == null){
             return new ArrayList<>();
         }
 
         List<MessageVO> messageVOS = messageService.findMessageByTag(tagService.findTagByContent(kind));
         messageVOS.removeIf(messageVO -> messageVO.getStatus() != State.RECOMMENDED);
-        return messageVOS;
+        List<CommodityVO> commodityVOS = shoppingService.findAllCommodities();
+        commodityVOS.removeIf(commodityVO -> {
+            if (commodityVO.getStatus() != State.RECOMMENDED){
+                return true;
+            }
+
+            for (TagVO tagVO : commodityVO.getTagVOS()) {
+                if (tagVO.getContent().equals(kind)){
+                    return false;
+                }
+            }
+           return true;
+        });
+
+        List<Article> articles = new ArrayList<>(messageVOS.size() + commodityVOS.size());
+        messageVOS.forEach(messageVO -> articles.add(new Article(messageVO)));
+        commodityVOS.forEach(commodityVO -> articles.add(new Article(commodityVO)));
+        return articles;
     }
 
     /**
@@ -377,5 +395,33 @@ public class PostController {
         ArrayList list = new ArrayList<>(Arrays.asList(messageVO1, messageVO2, commodityVO));
         System.out.println(list.getClass());
         System.out.println(JsonUtil.toJson(list));
+    }
+}
+
+@Data
+class Article{
+    private long id;
+    private String title;
+    private List<String> covers;
+    private String video;
+    private String type;
+    private PostType postType;
+
+    Article(MessageVO messageVO){
+        id = messageVO.getMessageId();
+        title = messageVO.getTitle();
+        covers = messageVO.getCovers();
+        video = messageVO.getVideo();
+        type = SHARE;
+        postType = messageVO.getPostType();
+    }
+
+    Article(CommodityVO commodityVO){
+        id = commodityVO.getCid();
+        title = commodityVO.getTitle();
+        covers = commodityVO.getCovers();
+        video = commodityVO.getVideo();
+        type = SELL;
+        postType = commodityVO.getPostType();
     }
 }
