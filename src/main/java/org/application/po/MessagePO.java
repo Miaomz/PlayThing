@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.application.util.PostType;
 import org.application.util.State;
+import org.application.util.TagsConverter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,7 +27,8 @@ public class MessagePO implements PO {
 
     private long userId;
 
-    @OneToMany(targetEntity = TagPO.class)
+    @Lob
+    @Convert(converter = TagsConverter.class)
     private List<TagPO> tags;
 
     /**

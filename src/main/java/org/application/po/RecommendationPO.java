@@ -3,6 +3,7 @@ package org.application.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.application.util.TagsConverter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -27,7 +28,8 @@ public class RecommendationPO implements PO{
 
     private boolean isDeleted;
 
-    @OneToMany
+    @Lob
+    @Convert(converter = TagsConverter.class)
     private List<TagPO> tags;
 
 }
