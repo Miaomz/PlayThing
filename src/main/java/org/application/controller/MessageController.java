@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.application.util.ClassType.SHARE;
 import static org.application.util.ConstantString.USER_ID;
@@ -66,9 +69,6 @@ public class MessageController {
         }
         result.addAll(oneReceived);
         result.addAll(twoReceived);
-
-        //reverse the list, from ascending to descending
-        Collections.reverse(result);
         return result;
     }
 
