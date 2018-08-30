@@ -65,8 +65,9 @@ public class UserController {
     @RequestMapping("/register")
     public long register(HttpServletRequest request, HttpServletResponse response,
                                   @RequestParam String userName, @RequestParam String password, @RequestParam(required = false) MultipartFile avatar,
-                                  @RequestParam String location, @RequestParam String mail, @RequestParam String phone, @RequestParam String[] tags){
-        saveTags(Arrays.asList(tags));
+                                  @RequestParam String location, @RequestParam String mail, @RequestParam String phone, @RequestParam(required = false) String[] tags){
+        if(tags != null)
+            saveTags(Arrays.asList(tags));
 
         UserVO userVO = new UserVO();
         userVO.setUserName(userName);
@@ -76,6 +77,7 @@ public class UserController {
         userVO.setMail(mail);
         userVO.setPhone(phone);
         userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
+
 
         userVO.setRole(ROLE_USER);
 
@@ -106,8 +108,9 @@ public class UserController {
     @RequestMapping("/editPerInfo")
     public ResultMessage editPersonInfo(@RequestParam String userName, @RequestParam(required = false) MultipartFile avatar,
                                         @RequestParam String location, @RequestParam String mail,
-                                        @RequestParam String phone, @RequestParam String[] tags){
-        saveTags(Arrays.asList(tags));
+                                        @RequestParam String phone, @RequestParam(required = false) String[] tags){
+        if(tags != null)
+            saveTags(Arrays.asList(tags));
 
         UserVO userVO = userService.findUserByName(userName);
         if (userVO == null){
@@ -123,8 +126,8 @@ public class UserController {
     }
 
     @RequestMapping("/adminLogin")
-    public ResultMessage adminLogin(@RequestParam String userName, @RequestParam String password, HttpServletRequest request){
-        UserVO userVO = userService.findUserByName(userName);
+    public ResultMessage adminLogin(@RequestParam String username, @RequestParam String password, HttpServletRequest request){
+        UserVO userVO = userService.findUserByName(username);
         if (userVO == null){
             return ResultMessage.INEXISTENCE;
         }
@@ -135,7 +138,7 @@ public class UserController {
             token.setDetails(new WebAuthenticationDetails(request));
             SecurityContextHolder.getContext().setAuthentication(token);
             request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-            request.getSession().setAttribute(USER_ID, userService.findUserByName(userName).getUserId());
+            request.getSession().setAttribute(USER_ID, userService.findUserByName(username).getUserId());
             return ResultMessage.SUCCESS;
         } else {
             return ResultMessage.WRONG_PASS;
@@ -157,6 +160,8 @@ public class UserController {
     }
 
     private List<TagVO> getTagVOsInBatch(List<String> tagIds){
+        if(tagIds == null)
+            return new ArrayList<>();
         List<TagVO> tagVOS = new ArrayList<>(tagIds.size());
         tagIds.forEach(tag -> tagVOS.add(tagService.findTagByContent(tag)));
         tagVOS.removeIf(Objects::isNull);
