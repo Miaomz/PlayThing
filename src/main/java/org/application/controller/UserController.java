@@ -126,8 +126,8 @@ public class UserController {
     }
 
     @RequestMapping("/adminLogin")
-    public ResultMessage adminLogin(@RequestParam String userName, @RequestParam String password, HttpServletRequest request){
-        UserVO userVO = userService.findUserByName(userName);
+    public ResultMessage adminLogin(@RequestParam String username, @RequestParam String password, HttpServletRequest request){
+        UserVO userVO = userService.findUserByName(username);
         if (userVO == null){
             return ResultMessage.INEXISTENCE;
         }
@@ -138,7 +138,7 @@ public class UserController {
             token.setDetails(new WebAuthenticationDetails(request));
             SecurityContextHolder.getContext().setAuthentication(token);
             request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-            request.getSession().setAttribute(USER_ID, userService.findUserByName(userName).getUserId());
+            request.getSession().setAttribute(USER_ID, userService.findUserByName(username).getUserId());
             return ResultMessage.SUCCESS;
         } else {
             return ResultMessage.WRONG_PASS;
