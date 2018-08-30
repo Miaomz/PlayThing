@@ -34,7 +34,7 @@ public class CommodityVO implements VO{
     private String content;
     private State status;
 
-    private ClassType type = ClassType.COMMODITY;
+    private ClassType type = ClassType.SELL;
 
 
     public CommodityVO(CommodityPO commodityPO){

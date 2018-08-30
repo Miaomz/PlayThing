@@ -41,7 +41,7 @@ public class MessageVO implements VO {
 
     private State status;
 
-    private ClassType type = ClassType.MESSAGE;
+    private ClassType type = ClassType.SHARE;
 
 
     public MessageVO(MessagePO messagePO){
