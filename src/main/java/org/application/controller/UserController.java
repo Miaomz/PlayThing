@@ -89,8 +89,7 @@ public class UserController {
                 SecurityContextHolder.getContext().setAuthentication(token);
                 request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
                 request.getSession().setAttribute(USER_ID, userService.findUserByName(userName).getUserId());
-                response.setStatus(HttpServletResponse.SC_OK);
-            } else response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
         } catch (Exception e) {
             LoggerUtil.getLogger().info(e);
         }
