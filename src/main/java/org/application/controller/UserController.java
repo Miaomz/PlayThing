@@ -76,7 +76,8 @@ public class UserController {
         userVO.setLocation(location);
         userVO.setMail(mail);
         userVO.setPhone(phone);
-        userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
+        if (tags != null)
+            userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
 
 
         userVO.setRole(ROLE_USER);
@@ -121,7 +122,9 @@ public class UserController {
         userVO.setMail(mail);
         userVO.setPhone(phone);
         userVO.setDisplay(uploadAvatar(userName, avatar));
-        userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
+        if (tags != null)
+            userVO.setTags(getTagVOsInBatch(Arrays.asList(tags)));
+
         return userService.modifyUser(userVO);
     }
 
@@ -169,6 +172,10 @@ public class UserController {
     }
 
     private void saveTags(List<String> tags){
+        if (tags == null){
+            return;
+        }
+
         tags.forEach(tag -> {
             if (tagService.findTagByContent(tag) == null){
                 TagVO tagVO = new TagVO();
