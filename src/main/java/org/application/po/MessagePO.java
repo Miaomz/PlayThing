@@ -49,7 +49,7 @@ public class MessagePO implements PO {
 
     private String title;
 
-    @Column(length = 16384)
+    @Column(length = 12000)
     private String content;
 
     private boolean isDeleted;
