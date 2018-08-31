@@ -133,7 +133,8 @@ public class MessageDAOImpl implements MessageDAO {
     @Transactional
     @Modifying
     public ResultMessage checkPrivateMes(long pmId) {
-        Query query = entityManager.createQuery("update PrivateMessagePO p set p.isChecked = true");
+        Query query = entityManager.createQuery("update PrivateMessagePO p set p.isChecked = true where p.pmId = :pmId");
+        query.setParameter("pmId", pmId);
         ResultMessage result = (query.executeUpdate() == 1) ? ResultMessage.SUCCESS: ResultMessage.FAILURE;
         entityManager.clear();
         return result;

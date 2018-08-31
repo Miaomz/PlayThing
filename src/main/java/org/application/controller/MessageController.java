@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.application.util.ClassType.SHARE;
 import static org.application.util.ConstantString.USER_ID;
@@ -69,7 +70,7 @@ public class MessageController {
         }
         result.addAll(oneReceived);
         result.addAll(twoReceived);
-        return result;
+        return result.stream().sorted(Comparator.comparing(PrivateMessageVO::getTime)).collect(Collectors.toList());
     }
 
     @RequestMapping("/send_privateMessage")
@@ -114,7 +115,7 @@ public class MessageController {
         List<PrivateMessageVO> receivedMessages = messageService.findReceivedMes((Long) session.getAttribute(USER_ID));
         receivedMessages.forEach(receivedMessage -> {
             if (receivedMessage.getSenderId() == senderId){
-                receivedMessage.setChecked(true);
+                messageService.checkPrivateMes(receivedMessage.getPmId());
             }
         });
     }

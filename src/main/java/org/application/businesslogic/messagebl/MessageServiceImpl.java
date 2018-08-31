@@ -90,6 +90,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    public ResultMessage checkPrivateMes(long pmId) {
+        return messageDAO.checkPrivateMes(pmId);
+    }
+
+    @Override
     public List<PrivateMessageVO> findSentMes(long senderId) {
         List<PrivateMessagePO> privateMessagePOS = messageDAO.findSentMes(senderId);
         TransUtil.removeDeleted(privateMessagePOS);

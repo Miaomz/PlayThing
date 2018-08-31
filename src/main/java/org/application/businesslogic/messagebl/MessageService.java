@@ -28,6 +28,8 @@ public interface MessageService {
 
     ResultMessage sendPrivateMes(PrivateMessageVO pm);
 
+    ResultMessage checkPrivateMes(long pmId);
+
     List<PrivateMessageVO> findSentMes(long senderId);
 
     List<PrivateMessageVO> findReceivedMes(long receiverId);
