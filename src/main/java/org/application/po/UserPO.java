@@ -36,7 +36,7 @@ public class UserPO implements PO {
     /**
      * 用户头像图片的url
      */
-    @Column(length = 64)
+    @Column(length = 1024)
     private String display;
 
     private String role;
