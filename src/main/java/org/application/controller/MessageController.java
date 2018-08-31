@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.application.util.ClassType.SHARE;
 import static org.application.util.ConstantString.USER_ID;
@@ -51,6 +48,9 @@ public class MessageController {
         //remove private messages with other users
         findChat(oneReceived, twoSent);
         findChat(twoReceived, oneSent);
+
+        sortList(oneReceived);
+        sortList(twoReceived);
 
         //merge two collections according to the time
         List<PrivateMessageVO> result = new ArrayList<>(oneReceived.size() + twoReceived.size());
@@ -158,5 +158,17 @@ public class MessageController {
             }
             return isNotSentByTwo;
         });
+    }
+
+    private void sortList(List<PrivateMessageVO> messageVOS){
+        for (int i = 1; i < messageVOS.size(); i++) {
+            for (int j = i; j > 0; j--) {
+                if (messageVOS.get(j).getTime().isAfter(messageVOS.get(j-1).getTime())){
+                    Collections.swap(messageVOS, j, j-1);
+                } else {
+                    break;
+                }
+            }
+        }
     }
 }
