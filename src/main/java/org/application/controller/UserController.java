@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -148,6 +149,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/dummy")
+    public String dummy(){
+        return "<html><head><title>dummy</title></head><body><p>Get method testing</p><p>medicine</p></body></html>";
+    }
+    
     private String uploadAvatar(String userName, MultipartFile avatar){
         if (avatar == null) {
             return null;
