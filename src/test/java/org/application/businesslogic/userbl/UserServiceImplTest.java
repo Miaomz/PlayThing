@@ -5,8 +5,10 @@ import org.application.vo.UserVO;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.application.util.ConstantString.ROLE_USER;
 import static org.junit.Assert.assertEquals;
@@ -28,9 +30,13 @@ public class UserServiceImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void addUser() {
-        userService.addUser(new UserVO());
-        userService.addUser(new UserVO());
+        UserVO user = new UserVO();
+        user.setUserName("try");
+        user.setPassword("hhhhhh");
+        userService.addUser(user);
         assertEquals(ROLE_USER, userService.findUserByName("try").getRole());
     }
 }
